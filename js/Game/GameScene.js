@@ -4,6 +4,7 @@ let testScene = new Scene();
 
 testScene.setup = function () {
     this.engine = Matter.Engine.create();
+    this.engine.gravity.scale = pow(10, -6);
     this.world = this.engine.world;
     this.runner = Matter.Runner.create();
     this.bodies = [];
@@ -12,12 +13,19 @@ testScene.setup = function () {
     this.cam.clearColor = color(0);
 
     this.blocks = [];
-    this.blocks.push(new Block(0, 0, 20, 20));
+
+    // Put them "into the scene" like this. 
+    // The `.push()`-ing is automatic as long as there is a `blocks[]` :D
+    new Block(0, 0, 20, 20, { rotation: PI / 3 });
+    new Block(0, cy / 6, cx, 20, { isStatic: true });
 
     // "Camera scripts" are functions that get a `Camera` as a parameter.
     // You modify the properties of the camera YOU RECEIVE, so the functionality can be transferred over.
 
-    //this.cam.script = function name(p_cam) {}
+    this.cam.script = function name(p_cam) {
+        p_cam.pos.x = sin(millis() * 0.001) * 250;
+        p_cam.center.x = p_cam.pos.x;
+    }
 }
 
 testScene.draw = function () {
@@ -26,7 +34,6 @@ testScene.draw = function () {
 
     // translate(-cx, -cy);
     for (let b of this.bodies) {
-        console.log(b.position);
         push();
         translate(b.position.x, b.position.y);
         rotateZ(b.angle);

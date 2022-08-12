@@ -115,7 +115,7 @@ class Camera {
 
         perspective(this.fov, width / height, this.near, this.far);
         camera(this.pos.x, this.pos.y, this.pos.z,
-            this.center.z, this.center.y, this.center.z,
+            this.center.x, this.center.y, this.center.z,
             this.up.x, this.up.y, this.up.z);
     }
 
