@@ -24,7 +24,7 @@ function setup() {
     // ..I still get `71` on my machine.
 
     rectMode(CENTER);
-    textAlign(CORNER);
+    textAlign(CENTER);
     textFont(FONTS[FONT_PATHS[0]], 32);
 
     setScene(SCENES[0]);

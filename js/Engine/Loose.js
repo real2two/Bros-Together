@@ -9,5 +9,6 @@ function end2D() {
 }
 
 function textOff(p_str, p_xoff, p_yoff) {
-    text(p_str, textWidth(p_str) + p_xoff, p_yoff + 2 * textAscent(p_str) - textDescent(p_str));
+    text(p_str, textWidth(p_str) / 2 + p_xoff,
+        p_yoff + 1.5 * textAscent(p_str) - textDescent(p_str));
 }
