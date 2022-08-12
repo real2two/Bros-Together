@@ -14,7 +14,7 @@ testScene.setup = function () {
 
     this.blocks = [];
 
-    // Put them "into the scene" like this. 
+    // Put them "into the scene" like this.
     // The `.push()`-ing is automatic as long as there is a `blocks[]` :D
     new Block(0, 0, 20, 20, { rotation: PI / 3 });
     new Block(0, cy / 6, cx, 20, { isStatic: true });
@@ -46,11 +46,11 @@ testScene.draw = function () {
         pop();
     }
 
-    push();
-    rotateY(millis() * 0.001);
-    rotateZ(millis() * 0.001);
-    box(45);
-    pop();
+    //push();
+    //rotateY(millis() * 0.001);
+    //rotateZ(millis() * 0.001);
+    //box(45);
+    //pop();
 
 };
 
