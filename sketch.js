@@ -2,6 +2,7 @@ let cx = 0.0, cy = 0.0;
 let currentScene;
 let gl;
 let clearColor;
+let fps;
 
 let FONT_PATHS = ["Sono-Regular.ttf"];
 let FONTS = {};
@@ -22,7 +23,7 @@ function setup() {
 
     rectMode(CENTER);
     textAlign(CENTER);
-    textFont(FONTS[FONT_PATHS[0]]);
+    textFont(FONTS[FONT_PATHS[0]], 32);
 
     setScene(SCENES[0]);
 }
@@ -31,6 +32,8 @@ function draw() {
     push();
     currentScene.draw();
     pop();
+
+    fps = int(frameRate());
 
     begin2D();
     // The UI issue has something to do with translation:

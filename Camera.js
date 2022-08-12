@@ -92,7 +92,7 @@ class Camera {
 
         this.fov = 60 * Math.PI / 180;
         this.near = 0.01;
-        this.far = 1000;
+        this.far = 10000;
 
         this.script = null; // Holds a 'script'. Don't complain about `null` for now.
         this.clearColor = null; // :(
@@ -104,8 +104,6 @@ class Camera {
         // Do it yourself now LOL. Made a function for it.
 
         begin2D();
-        // camera(); // Removing this will not display the previous camera's view, but still show clipping.
-        rectMode(CORNER);
         fill(this.clearColor);
         noStroke();
         //rect(-width * 2.5f, -height * 2.5f, width * 7.5f, height * 7.5f);
