@@ -3,8 +3,16 @@ let currentScene;
 let gl;
 let clearColor;
 
+let FONT_PATHS = ["Sono-Regular.ttf"];
+let FONTS = {};
+
+function preload() {
+    for (let f of FONT_PATHS)
+        FONTS[f] = loadFont(f);
+}
+
 function setup() {
-    createCanvas(windowWidth, windowHeight, WEBGL);
+    createCanvas(windowWidth, windowHeight - 1, WEBGL);
 
     cx = width / 2;
     cy = height / 2;
@@ -14,21 +22,24 @@ function setup() {
 
     rectMode(CENTER);
     textAlign(CENTER);
+    textFont(FONTS[FONT_PATHS[0]]);
+
+    setScene(SCENES[0]);
 }
 
 function draw() {
-    gl.disable(gl.DEPTH_TEST);
-    fill(0, 100);
-    rect(-25, -25, width + 25, height + 25);
-    gl.enable(gl.DEPTH_TEST);
-
-    perspective();
-    camera();
+    push();
     currentScene.draw();
+    pop();
+
+    begin2D();
+    translate(cx, cy);
+    currentScene.drawUi();
+    end2D();
 }
 
 function windowResized() {
-    resizeCanvas(windowWidth, windowHeight);
+    resizeCanvas(window.innerWidth, window.innerHeight);
     cx = width / 2;
     cy = height / 2;
 }
