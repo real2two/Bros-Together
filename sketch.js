@@ -1,10 +1,9 @@
 let cx = 0.0, cy = 0.0;
 let currentScene;
 let gl;
-let clearColor;
 let fps;
 
-let FONT_PATHS = ["Sono-Regular.ttf"];
+let FONT_PATHS = ["../res/Sono-Regular.ttf"];
 let FONTS = {};
 
 function preload() {
@@ -13,16 +12,19 @@ function preload() {
 }
 
 function setup() {
-    createCanvas(windowWidth, windowHeight - 1, WEBGL);
+    createCanvas(windowWidth, windowHeight, WEBGL);
 
     cx = width / 2;
     cy = height / 2;
-    clearColor = color(0);
 
     gl = document.getElementById("defaultCanvas0").getContext("webgl");
 
+    frameRate(60); // I get `71` on my machine, limit it!
+    // ...
+    // ..I still get `71` on my machine.
+
     rectMode(CENTER);
-    textAlign(CENTER);
+    textAlign(CORNER);
     textFont(FONTS[FONT_PATHS[0]], 32);
 
     setScene(SCENES[0]);

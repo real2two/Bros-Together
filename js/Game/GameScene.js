@@ -3,13 +3,14 @@
 let testScene = new Scene();
 
 testScene.setup = function () {
+    testScene.engine = Matter.Engine.create();
     testScene.cam = new Camera();
-    this.cam.clearColor = color(0, 0, 0, 255);
+    this.cam.clearColor = color(0);
 
     // "Camera scripts" are functions that get a `Camera` as a parameter.
     // You modify the properties of the camera YOU RECEIVE, so the functionality can be transferred over.
-    this.cam.script = function name(p_cam) {
-    }
+
+    //this.cam.script = function name(p_cam) {}
 }
 
 testScene.draw = function () {
@@ -18,12 +19,11 @@ testScene.draw = function () {
     push();
     rotateY(millis() * 0.001);
     rotateZ(millis() * 0.001);
-    // box(45);
+    box(45);
     pop();
 
 };
 
 testScene.drawUi = function () {
-    text("Ayo!", 0, 0);
-    text(fps, textWidth(fps), 2 * (textAscent(fps) - textDescent(fps)));
+    textOff(fps, 0, 0);
 }
