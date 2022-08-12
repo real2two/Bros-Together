@@ -15,6 +15,8 @@ testScene.setup = function () {
 testScene.draw = function () {
     this.cam.apply();
 
+    background(0); // Camera clear fix.
+
     push();
     rotateY(millis() * 0.001);
     rotateZ(millis() * 0.001);
@@ -23,6 +25,8 @@ testScene.draw = function () {
 
 };
 
+
+// Broken...
 testScene.drawUI = function () {
     text(frameRate(), textWidth(frameRate()), 40, 40);
 }

@@ -8,6 +8,7 @@ function end2D() {
     gl.enable(gl.DEPTH_TEST);
 }
 
-function background(p_color) {
-
+// Clears the screen with an alpha color using `gl.disable(gl.DEPTH_TEST)`, `fill()` and `rect()`.
+function backgroundA(p_color) {
+    // "Leave this to me!" - @Brahvim
 }

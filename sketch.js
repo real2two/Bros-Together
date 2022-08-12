@@ -33,7 +33,8 @@ function draw() {
     pop();
 
     begin2D();
-    translate(cx, cy);
+    // The UI issue has something to do with translation:
+    translate(-cx, -cy);
     currentScene.drawUi();
     end2D();
 }
