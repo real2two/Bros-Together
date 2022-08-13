@@ -4,9 +4,9 @@ let testScene = new Scene();
 
 testScene.setup = function () {
     this.engine = Engine.create();
-    //this.engine.velocityIterations = 10;
-    //this.engine.positionIterations = 10;
-    //this.engine.constraintIterations = 10;
+    // this.engine.velocityIterations = 10;
+    // this.engine.positionIterations = 10;
+    // this.engine.constraintIterations = 10;
 
     this.engine.gravity.scale = pow(10, -4); // Water.
     //this.engine.gravity.scale = pow(10, -3.7); // Soft Land.
@@ -66,6 +66,18 @@ testScene.update = function () {
     if (!!focused && !!docFocus && !!winFocus && !!document.hasFocus())
         Engine.update(this.engine, deltaTime);
 
+    if (this.player.position.x > cx / 2)
+        Body.setPosition(this.player, {
+            x: -cx / 2,
+            y: this.player.position.y > cy ? cy : this.player.position.y
+        });
+    else if (this.player.position.x < -cx / 2)
+        Body.setPosition(this.player, {
+            x: cx / 2,
+            y: this.player.position.y > cy ? cy : this.player.position.y
+        });
+
+
     // `W` / jumping is handled in the `testScene.keyPressed()` function.
     // Here we handle the sides:
     if (keyIsDown(65))
@@ -93,6 +105,20 @@ testScene.draw = function () {
 testScene.drawUi = function () {
     // This function makes sure the text is on the corner:
     textOff(fps, 0, 0);
+
+    if (mouseIsPressed) {
+        push();
+        rectMode(CORNER);
+        fill(127);
+        let coords = `${mouseX}, ${mouseY}`;
+        let twid = textWidth(coords);
+        translate(mouseX > cx ? mouseX - twid : mouseX, mouseY);
+        rect(0, 0, twid, 36);
+        textSize(32);
+        fill(255);
+        textOff(coords, 0, 0);
+        pop();
+    }
 }
 
 testScene.mousePressed = function () {

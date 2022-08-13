@@ -3,7 +3,6 @@ let titleScene = new Scene();
 titleScene.setup = function () {
     this.cam = new Camera();
     this.cam.clearColor = color(245);
-    this.cam.pos.z = 300;
     setCam(this.cam);
 
     this.playBtn = {
@@ -25,13 +24,12 @@ titleScene.update = function () {
             setScene(testScene);
         this.playBtn.alpha = sin((millis() - this.playBtn.exitStart) * 0.001) * 255;
         this.cam.clearColor = color(255 - this.playBtn.alpha);
-    }
-    else {
+    } else {
         this.playBtn.y = Math.sin(millis() * 0.0018) * 12.5;
-        if (mouseX > cx + this.playBtn.x - this.playBtn.w / 2 &&
-            mouseX < cx + this.playBtn.x + this.playBtn.w / 2 &&
-            mouseY > cy + this.playBtn.y - this.playBtn.w / 2 &&
-            mouseY < cy + this.playBtn.y + this.playBtn.h / 2) {
+        if (mouseX > cx + this.playBtn.x - this.playBtn.w * 1.25 &&
+            mouseX < cx + this.playBtn.x + this.playBtn.w * 1.25 &&
+            mouseY > cy + this.playBtn.y - this.playBtn.h * 1.25 &&
+            mouseY < cy + this.playBtn.y + this.playBtn.h * 1.25) {
             this.playBtn.hovered = true;
 
             if (!this.playBtn.phovered && this.playBtn.hovered) {
