@@ -103,7 +103,7 @@ gameScene.draw = function () {
         push();
         beginShape(TESS);
         
-        if (loadedObjects.includes(b)) {
+        if (loadedBodies.includes(b)) {
             noFill();
             stroke(255)
         }
@@ -129,7 +129,7 @@ gameScene.drawUi = function () {
         push();
         rectMode(CORNER);
         fill(127);
-        let coords = `${mouseX}, ${mouseY}`;
+        let coords = `${mouseX - cx}, ${mouseY - cy}`;
         let twid = textWidth(coords);
         translate(mouseX > cx ? mouseX - twid : mouseX, mouseY);
         rect(0, 0, twid, 36);

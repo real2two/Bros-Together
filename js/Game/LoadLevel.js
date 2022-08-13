@@ -35,15 +35,20 @@ function createBlock(p_px, p_py, p_sx, p_sy, p_opt) {
 }
 */
 
-const loadedObjects = [];
+let loadedLevel = {};
+const loadedBodies = [];
 
-function loadLevel({ blocks }) {
-    for (let i = 0; i < loadedObjects.length; ++i) {
-        Composite.remove(currentScene.engine.world, loadedObjects[i]);
-        currentScene.bodies.splice(currentScene.bodies.indexOf(loadedObjects[i]), 1);
+function loadLevel(level) {
+    for (let i = 0; i < loadedBodies.length; ++i) {
+        Composite.remove(currentScene.engine.world, loadedBodies[i]);
+        currentScene.bodies.splice(currentScene.bodies.indexOf(loadedBodies[i]), 1);
     }
+
+    const { blocks } = level;
 
     for (const { x, y, width, height } of blocks) {
-        loadedObjects.push(createBlock(x, y, width, height, { isStatic: true }));
+        loadedBodies.push(createBlock(x, y, width, height, { isStatic: true }));
     }
+
+    loadedLevel = level;
 }
