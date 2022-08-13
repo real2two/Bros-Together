@@ -11,6 +11,33 @@ function preload() {
 
     for (let f of FONT_PATHS)
         FONTS[f] = loadFont(f);
+
+    // WIP
+
+    const sheet = new Spritesheet('test.png');
+    sheet.createSprite('numbers', {
+        count: [
+            {
+                x: 0,
+                y: 0,
+                width: 20,
+                height: 29
+            },
+            {
+                x: 24,
+                y: 0,
+                width: 20,
+                height: 29
+            },
+            {
+                x: 49,
+                y: 0,
+                width: 20,
+                height: 29
+            }
+        ]
+    });
+    console.log('sprites', SPRITES);
 }
 
 function setup() {

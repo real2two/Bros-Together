@@ -2,18 +2,10 @@ const SPRITES = {};
 
 class Spritesheet {
     constructor(sheet) {
-        loadImage(`img/${sheet}`, img => {
-            this.sheet = img;
-        });
+        this.sheet = loadImage(`img/${sheet}`);
     }
 
     async createSprite(id, animations) {
-        if (!this.sheet) return await new Promise(resolve => {
-            setTimeout(async () => {
-                resolve(await this.createSprite(id, animations));
-            }, 0);
-        })
-
         const ANIMATIONS = {};
 
         /*
