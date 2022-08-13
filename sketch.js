@@ -6,8 +6,11 @@ let fps;
 let FONT_PATHS = ["../res/Sono-Regular.ttf"];
 let FONTS = {};
 
+let AUDIO = {};
+
 function preload() {
     soundFormats('mp3');
+    AUDIO['rickroll'] = loadSound('res/audio/copyrighted_music.mp3');
 
     for (let f of FONT_PATHS)
         FONTS[f] = loadFont(f);
