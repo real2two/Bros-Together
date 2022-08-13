@@ -1,14 +1,15 @@
-// Transformations:
 let cx = 0.0, cy = 0.0;
 let currentScene;
 let gl;
 let fps;
+let pfocused, winFocus = true, pwinFocus = true;
 
 // Assets:
 let FONT_PATHS = ["../res/Sono-Regular.ttf"];
 let FONTS = {};
 let SOUNDS = {};
 let testsheet;
+let { Composite, Events, Vector, Body, Bodies, Engine, Detector } = Matter;
 
 function preload() {
     soundFormats('mp3');
@@ -41,18 +42,22 @@ function setup() {
 }
 
 function draw() {
-    currentScene.update();
+    if (focused) {
+        currentScene.update();
 
-    push();
-    currentScene.draw();
-    pop();
+        push();
+        currentScene.draw();
+        pop();
 
-    fps = int(frameRate());
+        fps = int(frameRate());
 
-    begin2D();
-    translate(-cx, -cy);
-    currentScene.drawUi();
-    end2D();
+        begin2D();
+        translate(-cx, -cy);
+        currentScene.drawUi();
+        end2D();
+    }
+    pfocused = focused;
+    pwinFocus = winFocus;
 }
 
 function windowResized() {

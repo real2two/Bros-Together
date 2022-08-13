@@ -96,6 +96,8 @@ class Camera {
 
         this.script = null; // Holds a 'script'. Don't complain about `null` for now.
         this.clearColor = null; // :(
+
+        CAMERAS.push(this);
     }
 
     apply() {
