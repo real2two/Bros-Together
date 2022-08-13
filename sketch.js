@@ -49,7 +49,7 @@ function setup() {
     textAlign(CENTER);
     textFont(FONTS[FONT_PATHS[0]], 32);
 
-    setScene(SCENES[0]);
+    setScene(titleScene);
 }
 
 function draw() {
@@ -67,6 +67,7 @@ function draw() {
         currentScene.update();
 
     push();
+    currentCam.apply();
     currentScene.draw();
     pop();
 

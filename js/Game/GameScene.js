@@ -19,10 +19,11 @@ testScene.setup = function () {
 
     this.cam = new Camera();
     this.cam.clearColor = color(0, 120);
+    setCam(this.cam);
 
     // Put them "into the scene" like this.
     // The `.push()`-ing is automatic as long as there is a `bodies[]` or `blocks[]` :D
-    this.player = createBlock(0, 0, 20, 20, { angle: PI / 3 });
+    this.player = createBlock(0, 0, 20, 20);
     this.player.grounded = false;
     this.player.firstJump = false;
     Body.setMass(this.player, 25);
@@ -78,8 +79,6 @@ testScene.update = function () {
 }
 
 testScene.draw = function () {
-    this.cam.apply();
-
     for (let b of this.bodies) {
         push();
         beginShape(TESS);
