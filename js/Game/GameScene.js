@@ -140,6 +140,10 @@ gameScene.draw = function () {
                     fill('#F4DF4E')
                     break;
             }
+
+            if (b.killzone) {
+                stroke('#EE4B2B');
+            }
         }
 
         beginShape(TESS);
