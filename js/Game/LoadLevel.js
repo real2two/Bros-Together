@@ -71,6 +71,5 @@ function addBlock({ is, x, y, width, height, killzone = false, properties = {} }
     block.is = is;
     block.killzone = killzone;
 
-    console.log(block)
     loadedBodies.push(block);
 }

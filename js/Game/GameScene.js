@@ -203,6 +203,9 @@ gameScene.keyPressed = function name() {
 }
 
 function killPlayer() {
+    gameScene.player.grounded = false;
+    gameScene.player.firstJump = false;
+
     gameScene.player.lastDeathPosition = { ...gameScene.player.position };
 
     Body.setPosition(gameScene.player, { x: 0, y: 0 });
