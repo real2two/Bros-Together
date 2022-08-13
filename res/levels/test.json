@@ -6,6 +6,21 @@
             "y": 0,
             "width": 50,
             "height": 20
+        },
+        {
+            "type": "movable",
+            "x": 60,
+            "y": 20,
+            "width": 20,
+            "height": 20,
+            "properties": {}
+        },
+        {
+            "type": "collectable",
+            "x": 0,
+            "y": 20,
+            "width": 10,
+            "height": 10
         }
     ]
 }

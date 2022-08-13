@@ -36,19 +36,33 @@ gameScene.setup = function () {
 
     //#region: Player Grounding.
     Events.on(this.engine, "collisionStart", function (p_event) {
-        if (p_event.pairs.bodyA === this.player && p_event.pairs.bodyB === this.ground)
-            gameScene.player.grounded = true;
-        else if (p_event.pairs.bodyA === this.ground && p_event.pairs.bodyB === this.player)
-            gameScene.player.grounded = true;
+        for (const { bodyA, bodyB } of p_event.pairs) {
+            if ([ bodyA, bodyB ].includes(gameScene.player)) {
+                const other = bodyA === gameScene.player ? bodyB : bodyA;
+                
+                if (other && other.type && other.type === 'collectable') {
+                    Composite.remove(currentScene.engine.world, other);
+                    currentScene.bodies.splice(currentScene.bodies.indexOf(other), 1);
+
+                    //++points;
+
+                    continue;
+                }
+
+                if (other === gameScene.ground || [ 'static', 'movable' ].includes(other.type)) gameScene.player.grounded = true;
+            }
+        }
     });
 
     Events.on(this.engine, "collisionEnd", function (p_event) {
-        if (p_event.pairs.bodyA === this.player && p_event.pairs.bodyB === this.ground) {
-            gameScene.player.firstJump = true;
-            gameScene.player.grounded = false;
-        } else if (p_event.pairs.bodyA === this.ground && p_event.pairs.bodyB === this.player) {
-            gameScene.player.firstJump = true;
-            gameScene.player.grounded = false;
+        for (const { bodyA, bodyB } of p_event.pairs) {
+            if ([ bodyA, bodyB ].includes(gameScene.player)) {
+                const other = bodyA === gameScene.player ? bodyB : bodyA;
+                if (other === gameScene.ground || [ 'static', 'movable' ].includes(other.type)) {
+                    gameScene.player.firstJump = true;
+                    gameScene.player.grounded = false;
+                }
+            }
         }
     });
     //#endregion
@@ -64,14 +78,14 @@ gameScene.setup = function () {
 }
 
 gameScene.update = function () {
-    // These are slow. Simply setting the inertia to `Infinity` is better.
+    // These are slow. Simply setting the inertia to `Infinity` is betterwwwww.
     //Body.setAngle(this.player, 0);
     //Body.setAngularVelocity(this.player, 0);
 
     //#region Tab switch:
     // The user can switch tabs, but cannot change applications:
     if (!!focused && !!docFocus && !!winFocus && !!document.hasFocus() && document.visibilityState === 'visible' && !visible_fixed) {
-        Engine.update(this.engine, deltaTime);
+        Engine.update(this.engine, deltaTime > 16 ? 16 : deltaTime);
 
         if (this.player.position.x > 640 / 2)
             Body.setPosition(this.player, {
@@ -110,8 +124,18 @@ gameScene.draw = function () {
         push();
 
         if (loadedBodies.includes(b)) {
-            noFill();
-            stroke(255);
+            switch (b.type) {
+                case 'static':
+                    noFill();
+                    stroke(255);
+                    break;
+                case 'movable':
+                    fill(150);
+                    break;
+                case 'collectable':
+                    fill('#F4DF4E')
+                    break;
+            }
         }
 
         beginShape(TESS);

@@ -51,15 +51,22 @@ function loadLevel({ blocks }) {
     }
 }
 
-function addBlock({ type, x, y, width, height }) {
+function addBlock({ type, x, y, width, height, properties = {} }) {
     loadedLevel.blocks.push({ type, x, y, width, height });
 
     let block;
     switch (type) {
         case 'static':
-            block = createBlock(x, y, width, height, { isStatic: true });
+            block = createBlock(x, y, width, height, { isStatic: true, ...properties });
+            break;
+        case 'movable':
+            block = createBlock(x, y, width, height, properties);
+            break;
+        case 'collectable':
+            block = createBlock(x, y, width, height, properties);
             break;
     }
 
+    block.type = type;
     loadedBodies.push(block);
 }
