@@ -35,24 +35,31 @@ function createBlock(p_px, p_py, p_sx, p_sy, p_opt) {
 }
 */
 
-const mapEditor = true;
-
-let loadedLevel = { blocks: [] };
+const loadedLevel = { blocks: [] };
 const loadedBodies = [];
 
-let placing = null;
+function loadLevel({ blocks }) {
+    loadedLevel.blocks = [];
 
-function loadLevel(level) {
     for (let i = 0; i < loadedBodies.length; ++i) {
         Composite.remove(currentScene.engine.world, loadedBodies[i]);
         currentScene.bodies.splice(currentScene.bodies.indexOf(loadedBodies[i]), 1);
     }
 
-    const { blocks } = level;
+    for (const block of blocks) {
+        addBlock(block);
+    }
+}
 
-    for (const { x, y, width, height } of blocks) {
-        loadedBodies.push(createBlock(x, y, width, height, { isStatic: true }));
+function addBlock({ type, x, y, width, height }) {
+    loadedLevel.blocks.push({ type, x, y, width, height });
+
+    let block;
+    switch (type) {
+        case 'static':
+            block = createBlock(x, y, width, height, { isStatic: true });
+            break;
     }
 
-    loadedLevel = level;
+    loadedBodies.push(block);
 }

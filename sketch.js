@@ -4,6 +4,8 @@ let gl;
 let fps;
 let pfocused, winFocus = true, pwinFocus = true, docFocus = true, pdocFocus;
 
+let visible_fixed;
+
 // Assets:
 let FONT_PATHS = ["../res/Sono-Regular.ttf"];
 let FONTS = {};
@@ -32,7 +34,6 @@ function setup() {
 
     gl = document.getElementById("defaultCanvas0").getContext("webgl");
 
-    // [https://stackoverflow.com/a/10328928/13951505]
     window.addEventListener('blur', () => {
         //console.log("Browser minimized...");
         winFocus = false;

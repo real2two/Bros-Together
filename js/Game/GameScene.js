@@ -15,7 +15,7 @@ gameScene.setup = function () {
 
     this.anim = new Animator(testsheet); // There's already a class called "Animation" for CSS animations...
 
-    console.log("Frames:" + this.anim.frames);
+    console.log("Frames:", this.anim.frames);
 
     this.cam = new Camera();
     this.cam.clearColor = color(0, 120);
@@ -70,31 +70,38 @@ gameScene.update = function () {
 
     //#region Tab switch:
     // The user can switch tabs, but cannot change applications:
-    if (!!focused && !!docFocus && !!winFocus && !!document.hasFocus())
+    if (!!focused && !!docFocus && !!winFocus && !!document.hasFocus() && document.visibilityState === 'visible' && !visible_fixed) {
         Engine.update(this.engine, deltaTime);
 
-    if (this.player.position.x > 640 / 2)
-        Body.setPosition(this.player, {
-            x: -640 / 2,
-            y: this.player.position.y > cy ? cy : this.player.position.y
-        });
-    else if (this.player.position.x < -640 / 2)
-        Body.setPosition(this.player, {
-            x: 640 / 2,
-            y: this.player.position.y > cy ? cy : this.player.position.y
-        });
-    //#endregion
+        if (this.player.position.x > 640 / 2)
+            Body.setPosition(this.player, {
+                x: -640 / 2,
+                y: this.player.position.y > cy ? cy : this.player.position.y
+            });
+        else if (this.player.position.x < -640 / 2)
+            Body.setPosition(this.player, {
+                x: 640 / 2,
+                y: this.player.position.y > cy ? cy : this.player.position.y
+            });
+        //#endregion
 
-    // `W` / jumping is handled in the `testScene.keyPressed()` function.
-    // Here we handle the sides:
-    if (keyIsDown(65))
-        Body.applyForce(this.player, this.player.position, Vector.create(-0.01, 0));
-    if (keyIsDown(68))
-        Body.applyForce(this.player, this.player.position, Vector.create(0.01, 0));
+        // `W` / jumping is handled in the `testScene.keyPressed()` function.
+        // Here we handle the sides:
+        if (keyIsDown(65))
+            Body.applyForce(this.player, this.player.position, Vector.create(-0.01, 0));
+        if (keyIsDown(68))
+            Body.applyForce(this.player, this.player.position, Vector.create(0.01, 0));
 
-    // `S` key:
-    //if (keyIsDown(83))
-    //Body.applyForce(this.player, this.player.position, Vector.create(0, 0.01));
+        // `S` key:
+        //if (keyIsDown(83))
+        //Body.applyForce(this.player, this.player.position, Vector.create(0, 0.01));
+    } else {
+        if (document.visibilityState === 'visible' && !visible_fixed) {
+            visible_fixed = performance.now() + deltaTime;
+        }
+
+        if (visible_fixed && performance.now() > visible_fixed) visible_fixed = null;
+    }
 }
 
 //#region `gameScene.draw()`:
@@ -114,42 +121,6 @@ gameScene.draw = function () {
 
         pop();
     }
-
-    if (mapEditor === true) {
-        if (placing) {
-            let x = mouseX - cx,
-                y = mouseY - cy;
-                
-            let x1 = placing.x,
-                x2 = x,
-                y1 = placing.y,
-                y2 = y;
-
-            if (x < placing.x) {
-                x1 = x;
-                x2 = placing.x;
-            }
-
-            if (y < placing.y) {
-                y1 = y;
-                y2 = placing.y;
-            }
-
-            const width = x2 - x1;
-            const height = y2 - y1;
-            
-            push();
-
-            noFill();
-            stroke(255);
-
-            beginShape(TESS);
-            rect(x1, y1, width, height);
-            endShape(CLOSE);
-
-            pop();
-        }
-    }
 };
 //#endregion
 
@@ -160,16 +131,13 @@ gameScene.drawUi = function () {
     //this.anim.draw(mouseX, mouseY);
     //image(testsheet.sprites[1], mouseX, mouseY, 400, 400);
 
-    const x = mouseX - cx;
-    const y = mouseY - cy;
-
     // Debugging Coordinates:
     if (mouseIsPressed) {
         //#region
         push();
         rectMode(CORNER);
         fill(127);
-        let coords = `${x}, ${y}`;
+        let coords = `${mouseX}, ${mouseY}`;
         let twid = textWidth(coords);
         translate(mouseX > cx ? mouseX - twid : mouseX, mouseY);
         rect(0, 0, twid, 36);
@@ -178,45 +146,6 @@ gameScene.drawUi = function () {
         textOff(coords, 0, 0);
         pop();
         //#endregion
-    }
-
-    // Map editor
-    if (mapEditor === true) {
-        if (currentScene.engine.world === undefined) return;
-
-        if (mouseIsPressed) {
-            // Place block. (left click)
-            if (mouseButton === LEFT) {
-                if (!placing) {
-                    placing = { x, y };
-                }
-            }
-        } else {
-            if (placing) {
-                let x1 = placing.x,
-                    x2 = x,
-                    y1 = placing.y,
-                    y2 = y;
-
-                if (x < placing.x) {
-                    x1 = x;
-                    x2 = placing.x;
-                }
-
-                if (y < placing.y) {
-                    y1 = y;
-                    y2 = placing.y;
-                }
-
-                const width = x2 - x1;
-                const height = y2 - y1;
-
-                loadedBodies.push(createBlock(x1, y1, width, height, { isStatic: true }));
-                loadedLevel.blocks.push(x1, y2, width, height);
-
-                placing = null;
-            }
-        }
     }
 }
 
