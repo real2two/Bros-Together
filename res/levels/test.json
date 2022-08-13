@@ -18,10 +18,11 @@
         },
         {
             "is": "collectable",
-            "x": 0,
+            "x": -30,
             "y": 20,
             "width": 10,
-            "height": 10
+            "height": 10,
+            "properties": { "isStatic": true }
         }
     ]
 }
