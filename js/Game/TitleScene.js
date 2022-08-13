@@ -48,7 +48,7 @@ titleScene.draw = function () {
     translate(this.playBtn.x, this.playBtn.y);
     rect(0, 0, this.playBtn.w, this.playBtn.h);
 
-    image(testsheet.sprites[1], 0, 0);
+    // image(testsheet.sprites[1], 0, 0);
 
     fill(0);
     textSize(16);

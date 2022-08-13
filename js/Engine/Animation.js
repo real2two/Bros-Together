@@ -1,7 +1,12 @@
 class Animator {
     constructor(p_sprSheet, p_x, p_y) {
-        // Frame data:
-        this.frames = p_sprSheet.sprites || [];
+        this.frames = []; // Frame data.
+
+        for (let spr of p_sprSheet.sprites) {
+            console.log(spr);
+            this.frames.push(spr);
+        }
+
         this.beginFrame = -1;
         this.fid = -1; // "Frame ID".
         this.endFrame = -1;

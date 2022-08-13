@@ -19,13 +19,9 @@ function preload() {
         FONTS[f] = loadFont(f);
 
     testsheet = new Spritesheet('test.png');
-    testsheet.cropAll(24);
+    //testImage = loadImage("img/test.png");
 
-    // testImage = loadImage("img/test.png");
 
-    testsheet.crop(0, 0, 20, 29);
-    testsheet.crop(24, 0, 20, 29);
-    testsheet.crop(49, 0, 20, 29);
 }
 
 function setup() {
@@ -50,6 +46,11 @@ function setup() {
     rectMode(CENTER);
     textAlign(CENTER);
     textFont(FONTS[FONT_PATHS[0]], 32);
+
+    testsheet.cropAll(24);
+    //testsheet.crop(0, 0, 20, 29);
+    //testsheet.crop(24, 0, 20, 29);
+    //testsheet.crop(49, 0, 20, 29);
 
     setScene(titleScene);
 }
@@ -88,6 +89,8 @@ function draw() {
     pdocFocus = docFocus;
 }
 
+
+//#region p5 Event Callbacks:
 function windowResized() {
     resizeCanvas(window.innerWidth, window.innerHeight);
     cx = width / 2;
@@ -96,3 +99,5 @@ function windowResized() {
 
 function keyPressed() { currentScene.keyPressed(); }
 function mousePressed() { currentScene.mousePressed(); }
+//#endregion
+
