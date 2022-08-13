@@ -1,4 +1,8 @@
 {
+    "start_pos": {
+        "x": 0,
+        "y": -100
+    },
     "blocks": [
         {
             "is": "static",
@@ -22,7 +26,7 @@
             "y": 20,
             "width": 10,
             "height": 10,
-            "properties": { "isStatic": true }
+            "properties": { "isStatic": false }
         }
     ]
 }

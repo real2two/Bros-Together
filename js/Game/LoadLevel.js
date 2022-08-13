@@ -38,7 +38,8 @@ function createBlock(p_px, p_py, p_sx, p_sy, p_opt) {
 const loadedLevel = { blocks: [] };
 let loadedBodies = [];
 
-function loadLevel({ blocks }) {
+function loadLevel({ start_pos = { x: 0, y: 0 }, blocks }) {
+    loadedLevel.start_pos = start_pos;
     loadedLevel.blocks = blocks;
 
     Composite.remove(currentScene.engine.world, loadedBodies);
@@ -52,6 +53,15 @@ function loadLevel({ blocks }) {
     for (const block of blocks) {
         addBlock(block);
     }
+
+    gameScene.player.grounded = false;
+    gameScene.player.firstJump = false;
+
+    gameScene.player.lastDeathPosition = { ...gameScene.player.position };
+
+    Body.setPosition(gameScene.player, start_pos);
+    Body.setVelocity(gameScene.player, { x: 0, y: 0 });
+    Body.setAngularVelocity(gameScene.player, 0);
 }
 
 function addBlock({ is, x, y, width, height, killzone = false, properties = {} }) {
