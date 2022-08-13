@@ -18,7 +18,7 @@ async function wipBrahvimChangeThis() {
     soundFormats('mp3');
     // uses p5.sound because that's already really good!
     // all loadAudio(id, file) does is set the variable AUDIO[<audio id>] into the p5.sound function.
-    await loadAudio('rickroll', 'copyrighted_music.mp3'); // AUDIO['rickroll'].play(); (plays a rickroll)
+    await loadAudio('rickroll', 'audio/copyrighted_music.mp3'); // AUDIO['rickroll'].play(); (plays a rickroll)
 
     const sheet = new Spritesheet('test.png');
     await sheet.createSprite('numbers', {
