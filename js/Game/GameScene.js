@@ -28,16 +28,15 @@ testScene.setup = function () {
     }
 }
 
-testScene.draw = function () {
+testScene.update = function () {
     Matter.Runner.run(this.runner, this.engine);
+}
+
+testScene.draw = function () {
     this.cam.apply();
 
-    // translate(-cx, -cy);
     for (let b of this.bodies) {
         push();
-        //translate(b.position.x, b.position.y);
-        //rotateZ(b.angle);
-
         beginShape(TESS);
         for (let v of b.vertices)
             vertex(v.x, v.y);
@@ -45,16 +44,13 @@ testScene.draw = function () {
 
         pop();
     }
-
-    //push();
-    //rotateY(millis() * 0.001);
-    //rotateZ(millis() * 0.001);
-    //box(45);
-    //pop();
-
 };
 
 testScene.drawUi = function () {
     // This function makes sure the text is on the corner:
     textOff(fps, 0, 0);
+}
+
+testScene.mousePressed = function () {
+    SOUNDS["rickroll"].play();
 }

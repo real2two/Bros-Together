@@ -1,18 +1,18 @@
+// Transformations:
 let cx = 0.0, cy = 0.0;
 let currentScene;
 let gl;
 let fps;
 
+// Assets:
 let FONT_PATHS = ["../res/Sono-Regular.ttf"];
 let FONTS = {};
-
-let AUDIO = {};
-
+let SOUNDS = {};
 let testsheet;
 
 function preload() {
     soundFormats('mp3');
-    AUDIO['rickroll'] = loadSound('res/audio/copyrighted_music.mp3');
+    loadAudio("rickroll");
 
     for (let f of FONT_PATHS)
         FONTS[f] = loadFont(f);
@@ -20,10 +20,9 @@ function preload() {
     // WIP
 
     testsheet = new Spritesheet('test.png');
-
-    testsheet.cropSheet(0, 0, 20, 29);
-    testsheet.cropSheet(24, 0, 20, 29);
-    testsheet.cropSheet(49, 0, 20, 29);
+    testsheet.crop(0, 0, 20, 29);
+    testsheet.crop(24, 0, 20, 29);
+    testsheet.crop(49, 0, 20, 29);
 }
 
 function setup() {
@@ -34,10 +33,6 @@ function setup() {
 
     gl = document.getElementById("defaultCanvas0").getContext("webgl");
 
-    frameRate(60); // I get `71` on my machine, limit it!
-    // ...
-    // ..I still get `71` on my machine.
-
     rectMode(CENTER);
     textAlign(CENTER);
     textFont(FONTS[FONT_PATHS[0]], 32);
@@ -46,6 +41,8 @@ function setup() {
 }
 
 function draw() {
+    currentScene.update();
+
     push();
     currentScene.draw();
     pop();
@@ -53,7 +50,6 @@ function draw() {
     fps = int(frameRate());
 
     begin2D();
-    // The UI issue has something to do with translation:
     translate(-cx, -cy);
     currentScene.drawUi();
     end2D();
