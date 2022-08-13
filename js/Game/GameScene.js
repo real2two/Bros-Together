@@ -27,7 +27,7 @@ testScene.setup = function () {
     this.player.grounded = false;
     this.player.firstJump = false;
     Body.setMass(this.player, 25);
-    this.ground = createBlock(0, cy / 6, 768, 20, { isStatic: true, frictionStatic: 0.008 });
+    this.ground = createBlock(0, 72, 768, 20, { isStatic: true, frictionStatic: 0.008 });
 
     //#region: Player Grounding.
     Events.on(this.engine, "collisionStart", function (p_event) {
@@ -66,14 +66,14 @@ testScene.update = function () {
     if (!!focused && !!docFocus && !!winFocus && !!document.hasFocus())
         Engine.update(this.engine, deltaTime);
 
-    if (this.player.position.x > cx / 2)
+    if (this.player.position.x > 640 / 2)
         Body.setPosition(this.player, {
-            x: -cx / 2,
+            x: -640 / 2,
             y: this.player.position.y > cy ? cy : this.player.position.y
         });
-    else if (this.player.position.x < -cx / 2)
+    else if (this.player.position.x < -640 / 2)
         Body.setPosition(this.player, {
-            x: cx / 2,
+            x: 640 / 2,
             y: this.player.position.y > cy ? cy : this.player.position.y
         });
 

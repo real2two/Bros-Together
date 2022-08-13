@@ -1,12 +1,12 @@
 class Spritesheet {
     constructor(sheet) {
         this.sheet = loadImage(`img/${sheet}`);
-        this.frames = [];
+        this.sprites = [];
     }
 
     crop(x, y, width, height) {
-        const sprite = createImage(width, height); // createGraphics()
+        const sprite = createImage(width, height);
         sprite.copy(this.sheet, x, y, width, height, 0, 0, width, height);
-        return this.frames.push(sprite);
+        this.sprites.push(sprite);
     }
 }
