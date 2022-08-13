@@ -2,7 +2,7 @@ let cx = 0.0, cy = 0.0;
 let currentScene;
 let gl;
 let fps;
-let pfocused, winFocus = true, pwinFocus = true;
+let pfocused, winFocus = true, pwinFocus = true, docFocus = true, pdocFocus;
 
 // Assets:
 let FONT_PATHS = ["../res/Sono-Regular.ttf"];
@@ -34,6 +34,17 @@ function setup() {
 
     gl = document.getElementById("defaultCanvas0").getContext("webgl");
 
+    // [https://stackoverflow.com/a/10328928/13951505]
+    window.addEventListener('blur', () => {
+        console.log("Browser minimized...");
+        winFocus = false;
+    }, false);
+
+    window.addEventListener('focus', () => {
+        console.log("Browser in focus.");
+        winFocus = true;
+    }, false);
+
     rectMode(CENTER);
     textAlign(CENTER);
     textFont(FONTS[FONT_PATHS[0]], 32);
@@ -42,22 +53,34 @@ function setup() {
 }
 
 function draw() {
-    if (focused) {
+    docFocus = document.hasFocus();
+
+    // Nothing works. These won't prevent the Physics Engine from wrongly calculating
+    // if the user switches application windows:
+
+    if (!pdocFocus && docFocus) deltaTime = 0;
+    if (!pdocFocus && document.hasFocus()) deltaTime = 0;
+    if (!pwinFocus && winFocus) deltaTime = 0;
+    if (!pfocused && focused) deltaTime = 0;
+
+    if (deltaTime != 0)
         currentScene.update();
 
-        push();
-        currentScene.draw();
-        pop();
+    push();
+    currentScene.draw();
+    pop();
 
-        fps = int(frameRate());
+    fps = int(frameRate());
 
-        begin2D();
-        translate(-cx, -cy);
-        currentScene.drawUi();
-        end2D();
-    }
+    begin2D();
+    translate(-cx, -cy);
+    currentScene.drawUi();
+    end2D();
+
+
     pfocused = focused;
     pwinFocus = winFocus;
+    pdocFocus = docFocus;
 }
 
 function windowResized() {

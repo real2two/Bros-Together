@@ -8,7 +8,11 @@ testScene.setup = function () {
     //this.engine.positionIterations = 10;
     //this.engine.constraintIterations = 10;
 
-    this.engine.gravity.scale = pow(10, -4);
+    this.engine.gravity.scale = pow(10, -4); // Water.
+    //this.engine.gravity.scale = pow(10, -3.7); // Soft Land.
+    //this.engine.gravity.scale = pow(10, -3.5); // A bit too much.
+    // Going any higher for the exponent may result in collisions missing.
+
     this.world = this.engine.world;
     this.bodies = [];
     //this.blocks[];
@@ -22,7 +26,7 @@ testScene.setup = function () {
     this.player.grounded = false;
     this.player.firstJump = false;
     Body.setMass(this.player, 25);
-    this.ground = createBlock(0, cy / 6, cx, 20, { isStatic: true, frictionStatic: 0.1 });
+    this.ground = createBlock(0, cy / 6, 768, 20, { isStatic: true, frictionStatic: 0.008 });
 
     //#region: Player Grounding.
     Events.on(this.engine, "collisionStart", function (p_event) {
@@ -51,18 +55,6 @@ testScene.setup = function () {
         //p_cam.center.x = p_cam.pos.x;
     }
 
-    // [https://stackoverflow.com/a/10328928/13951505]
-    window.addEventListener('blur', () => {
-        console.log("Browser minimized...");
-        winFocus = false;
-    }, false);
-
-    window.addEventListener('focus', () => {
-        console.log("Browser in focus.");
-        winFocus = true;
-    }, false);
-
-
 }
 
 testScene.update = function () {
@@ -70,10 +62,11 @@ testScene.update = function () {
     Body.setAngularVelocity(this.player, 0);
 
     // The user can switch tabs, but cannot change applications:
-    if (winFocus)
-        Engine.update(this.engine, pwinFocus ? deltaTime : 0);
+    if (!!focused && !!docFocus && !!winFocus && !!document.hasFocus())
+        Engine.update(this.engine, deltaTime);
 
     // `W` / jumping is handled in the `testScene.keyPressed()` function.
+    // Here we handle the sides:
     if (keyIsDown(65))
         Body.applyForce(this.player, this.player.position, Vector.create(-0.01, 0));
     if (keyIsDown(68))
@@ -108,14 +101,25 @@ testScene.mousePressed = function () {
 }
 
 testScene.keyPressed = function name() {
-    if (keyCode == 87)
-        if (this.player.grounded) {
-            Body.applyForce(this.player, this.player.position, Vector.create(0, -0.3));
-            this.player.firstJump = false;
-        } else if (this.player.firstJump) {
-            // Double jump:
-            Body.applyForce(this.player, this.player.position, Vector.create(0, -0.2));
-            this.player.firstJump = false;
-        }
+    switch (keyCode) {
+        case 87:
+            if (this.player.grounded) {
+                Body.applyForce(this.player, this.player.position, Vector.create(0, -0.3));
+                this.player.firstJump = false;
+            } else if (this.player.firstJump) {
+                // Double jump:
+                Body.applyForce(this.player, this.player.position, Vector.create(0, -0.28));
+                this.player.firstJump = false;
+            }
+            break;
 
+        case 82: // `R`
+            console.log("Resetting...");
+            Body.setPosition(this.player, { x: 0, y: 0 });
+            Body.setVelocity(this.player, { x: 0, y: 0 });
+            Body.setAngularVelocity(this.player, { x: 0, y: 0 });
+            this.player.lastDeathPosition = this.player.position;
+            break;
+
+    }
 }
