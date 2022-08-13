@@ -35,8 +35,12 @@ function createBlock(p_px, p_py, p_sx, p_sy, p_opt) {
 }
 */
 
-let loadedLevel = {};
+const mapEditor = true;
+
+let loadedLevel = { blocks: [] };
 const loadedBodies = [];
+
+let placing = null;
 
 function loadLevel(level) {
     for (let i = 0; i < loadedBodies.length; ++i) {

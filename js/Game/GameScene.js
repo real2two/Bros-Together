@@ -101,17 +101,54 @@ gameScene.update = function () {
 gameScene.draw = function () {
     for (let b of this.bodies) {
         push();
-        beginShape(TESS);
-        
+
         if (loadedBodies.includes(b)) {
             noFill();
-            stroke(255)
+            stroke(255);
         }
-        
+
+        beginShape(TESS);
         for (let v of b.vertices)
             vertex(v.x, v.y);
         endShape(CLOSE);
+
         pop();
+    }
+
+    if (mapEditor === true) {
+        if (placing) {
+            let x = mouseX - cx,
+                y = mouseY - cy;
+                
+            let x1 = placing.x,
+                x2 = x,
+                y1 = placing.y,
+                y2 = y;
+
+            if (x < placing.x) {
+                x1 = x;
+                x2 = placing.x;
+            }
+
+            if (y < placing.y) {
+                y1 = y;
+                y2 = placing.y;
+            }
+
+            const width = x2 - x1;
+            const height = y2 - y1;
+            
+            push();
+
+            noFill();
+            stroke(255);
+
+            beginShape(TESS);
+            rect(x1, y1, width, height);
+            endShape(CLOSE);
+
+            pop();
+        }
     }
 };
 //#endregion
@@ -123,13 +160,16 @@ gameScene.drawUi = function () {
     //this.anim.draw(mouseX, mouseY);
     //image(testsheet.sprites[1], mouseX, mouseY, 400, 400);
 
+    const x = mouseX - cx;
+    const y = mouseY - cy;
+
     // Debugging Coordinates:
     if (mouseIsPressed) {
         //#region
         push();
         rectMode(CORNER);
         fill(127);
-        let coords = `${mouseX - cx}, ${mouseY - cy}`;
+        let coords = `${x}, ${y}`;
         let twid = textWidth(coords);
         translate(mouseX > cx ? mouseX - twid : mouseX, mouseY);
         rect(0, 0, twid, 36);
@@ -138,6 +178,45 @@ gameScene.drawUi = function () {
         textOff(coords, 0, 0);
         pop();
         //#endregion
+    }
+
+    // Map editor
+    if (mapEditor === true) {
+        if (currentScene.engine.world === undefined) return;
+
+        if (mouseIsPressed) {
+            // Place block. (left click)
+            if (mouseButton === LEFT) {
+                if (!placing) {
+                    placing = { x, y };
+                }
+            }
+        } else {
+            if (placing) {
+                let x1 = placing.x,
+                    x2 = x,
+                    y1 = placing.y,
+                    y2 = y;
+
+                if (x < placing.x) {
+                    x1 = x;
+                    x2 = placing.x;
+                }
+
+                if (y < placing.y) {
+                    y1 = y;
+                    y2 = placing.y;
+                }
+
+                const width = x2 - x1;
+                const height = y2 - y1;
+
+                loadedBodies.push(createBlock(x1, y1, width, height, { isStatic: true }));
+                loadedLevel.blocks.push(x1, y2, width, height);
+
+                placing = null;
+            }
+        }
     }
 }
 

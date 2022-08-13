@@ -83,7 +83,6 @@ function draw() {
     currentScene.drawUi();
     end2D();
 
-
     pfocused = focused;
     pwinFocus = winFocus;
     pdocFocus = docFocus;
