@@ -6,9 +6,37 @@ let fps;
 let FONT_PATHS = ["../res/Sono-Regular.ttf"];
 let FONTS = {};
 
-function preload() {
+async function preload() {
     for (let f of FONT_PATHS)
         FONTS[f] = loadFont(f);
+
+    // WIP.
+    const sheet = new Spritesheet('test.png');
+    await sheet.createSprite('numbers', {
+        count: [
+            {
+                x: 0,
+                y: 0,
+                width: 20,
+                height: 29
+            },
+            {
+                x: 24,
+                y: 0,
+                width: 20,
+                height: 29
+            },
+            {
+                x: 49,
+                y: 0,
+                width: 20,
+                height: 29
+            }
+        ]
+    });
+    console.log('sprites', SPRITES);
+    //console.log(sheet.sheet.canvas.toDataURL());
+    //for (const frame of SPRITES.numbers['count']) console.log(frame.canvas.toDataURL());
 }
 
 function setup() {
@@ -41,6 +69,12 @@ function draw() {
     // The UI issue has something to do with translation:
     translate(-cx, -cy);
     currentScene.drawUi();
+    end2D();
+
+    // WIP sprite rendering.
+    begin2D();
+    translate(-cx, -cy);
+    renderSprite('numbers', 'count', Math.floor((Date.now() % 3000) / 1000), 0, 50);
     end2D();
 }
 

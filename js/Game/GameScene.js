@@ -35,8 +35,8 @@ testScene.draw = function () {
     // translate(-cx, -cy);
     for (let b of this.bodies) {
         push();
-        translate(b.position.x, b.position.y);
-        rotateZ(b.angle);
+        //translate(b.position.x, b.position.y);
+        //rotateZ(b.angle);
 
         beginShape(TESS);
         for (let v of b.vertices)
