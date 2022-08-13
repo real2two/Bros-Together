@@ -57,8 +57,6 @@ function loadLevel({ start_pos = { x: 0, y: 0 }, blocks }) {
     gameScene.player.grounded = false;
     gameScene.player.firstJump = false;
 
-    gameScene.player.lastDeathPosition = { ...gameScene.player.position };
-
     Body.setPosition(gameScene.player, start_pos);
     Body.setVelocity(gameScene.player, { x: 0, y: 0 });
     Body.setAngularVelocity(gameScene.player, 0);

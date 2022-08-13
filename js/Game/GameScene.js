@@ -89,6 +89,7 @@ gameScene.update = function () {
     if (!!focused && !!docFocus && !!winFocus && !!document.hasFocus() && document.visibilityState === 'visible' && !visible_fixed) {
         Engine.update(this.engine, deltaTime > 16 ? 16 : deltaTime);
 
+        /*
         if (this.player.position.x > 640 / 2)
             Body.setPosition(this.player, {
                 x: -640 / 2,
@@ -99,6 +100,10 @@ gameScene.update = function () {
                 x: 640 / 2,
                 y: this.player.position.y > cy ? cy : this.player.position.y
             });
+        */
+        if (this.player.position.x > 640 / 2 || this.player.position.x < -640 / 2) {
+            nextLevel();
+        }
         //#endregion
 
         // `W` / jumping is handled in the `testScene.keyPressed()` function.
@@ -205,5 +210,13 @@ gameScene.keyPressed = function name() {
 }
 
 function killPlayer() {
+    gameScene.player.lastDeathPosition = { ...gameScene.player.position };
+    loadLevel(loadedLevel);
+}
+
+function nextLevel() {
+    // ++level;
+
+    gameScene.player.lastDeathPosition = null;
     loadLevel(loadedLevel);
 }
