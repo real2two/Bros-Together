@@ -8,7 +8,7 @@ let pfocused, winFocus = true, pwinFocus = true, docFocus = true, pdocFocus;
 let FONT_PATHS = ["../res/Sono-Regular.ttf"];
 let FONTS = {};
 let SOUNDS = {};
-let testsheet;
+let testsheet, testImage;
 let { Composite, Events, Vector, Body, Bodies, Engine, Detector } = Matter;
 
 function preload() {
@@ -18,9 +18,11 @@ function preload() {
     for (let f of FONT_PATHS)
         FONTS[f] = loadFont(f);
 
-    // WIP
-
     testsheet = new Spritesheet('test.png');
+    testsheet.cropAll(24);
+
+    // testImage = loadImage("img/test.png");
+
     testsheet.crop(0, 0, 20, 29);
     testsheet.crop(24, 0, 20, 29);
     testsheet.crop(49, 0, 20, 29);
@@ -36,12 +38,12 @@ function setup() {
 
     // [https://stackoverflow.com/a/10328928/13951505]
     window.addEventListener('blur', () => {
-        console.log("Browser minimized...");
+        //console.log("Browser minimized...");
         winFocus = false;
     }, false);
 
     window.addEventListener('focus', () => {
-        console.log("Browser in focus.");
+        //console.log("Browser in focus.");
         winFocus = true;
     }, false);
 
@@ -67,6 +69,8 @@ function draw() {
         currentScene.update();
 
     push();
+    //for (let a of currentScene.ANIMATIONS)
+    //a.frameN++;
     currentCam.apply();
     currentScene.draw();
     pop();

@@ -1,8 +1,8 @@
 // ALWAYS call the constructor (AKA use `new`), then modify properties:
 
-let testScene = new Scene();
+let gameScene = new Scene();
 
-testScene.setup = function () {
+gameScene.setup = function () {
     this.engine = Engine.create();
     // this.engine.velocityIterations = 10;
     // this.engine.positionIterations = 10;
@@ -15,7 +15,8 @@ testScene.setup = function () {
 
     this.world = this.engine.world;
     this.bodies = [];
-    //this.blocks[];
+
+    this.anim = new Animator(testsheet); // There's already a class called "Animation" for CSS animations...
 
     this.cam = new Camera();
     this.cam.clearColor = color(0, 120);
@@ -32,18 +33,18 @@ testScene.setup = function () {
     //#region: Player Grounding.
     Events.on(this.engine, "collisionStart", function (p_event) {
         if (p_event.pairs.bodyA === this.player && p_event.pairs.bodyB === this.ground)
-            testScene.player.grounded = true;
+            gameScene.player.grounded = true;
         else if (p_event.pairs.bodyA === this.ground && p_event.pairs.bodyB === this.player)
-            testScene.player.grounded = true;
+            gameScene.player.grounded = true;
     });
 
     Events.on(this.engine, "collisionEnd", function (p_event) {
         if (p_event.pairs.bodyA === this.player && p_event.pairs.bodyB === this.ground) {
-            testScene.player.firstJump = true;
-            testScene.player.grounded = false;
+            gameScene.player.firstJump = true;
+            gameScene.player.grounded = false;
         } else if (p_event.pairs.bodyA === this.ground && p_event.pairs.bodyB === this.player) {
-            testScene.player.firstJump = true;
-            testScene.player.grounded = false;
+            gameScene.player.firstJump = true;
+            gameScene.player.grounded = false;
         }
     });
     //#endregion
@@ -58,7 +59,7 @@ testScene.setup = function () {
 
 }
 
-testScene.update = function () {
+gameScene.update = function () {
     Body.setAngle(this.player, 0);
     Body.setAngularVelocity(this.player, 0);
 
@@ -90,7 +91,7 @@ testScene.update = function () {
     //Body.applyForce(this.player, this.player.position, Vector.create(0, 0.01));
 }
 
-testScene.draw = function () {
+gameScene.draw = function () {
     for (let b of this.bodies) {
         push();
         beginShape(TESS);
@@ -102,10 +103,15 @@ testScene.draw = function () {
     }
 };
 
-testScene.drawUi = function () {
+gameScene.drawUi = function () {
     // This function makes sure the text is on the corner:
     textOff(fps, 0, 0);
 
+    this.anim.draw(mouseX, mouseY);
+
+    image(testsheet.sprites[1], mouseX, mouseY, 400, 400);
+
+    // Debugging Coordinates:
     if (mouseIsPressed) {
         push();
         rectMode(CORNER);
@@ -121,11 +127,11 @@ testScene.drawUi = function () {
     }
 }
 
-testScene.mousePressed = function () {
+gameScene.mousePressed = function () {
     //SOUNDS["rickroll"].play();
 }
 
-testScene.keyPressed = function name() {
+gameScene.keyPressed = function name() {
     switch (keyCode) {
         case 87:
             if (this.player.grounded) {

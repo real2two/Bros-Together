@@ -8,6 +8,7 @@ function setScene(p_scene) {
 class Scene {
     constructor() {
         SCENES.push(this);
+        this.ANIMATIONS = [];
     }
 
     setup() { }

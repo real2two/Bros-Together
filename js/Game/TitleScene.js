@@ -21,7 +21,7 @@ titleScene.setup = function () {
 titleScene.update = function () {
     if (this.playBtn.exitStarted) {
         if (millis() > this.playBtn.exitStart + 1000 * PI / 2)
-            setScene(testScene);
+            setScene(gameScene);
         this.playBtn.alpha = sin((millis() - this.playBtn.exitStart) * 0.001) * 255;
         this.cam.clearColor = color(255 - this.playBtn.alpha);
     } else {
@@ -47,6 +47,8 @@ titleScene.draw = function () {
     fill(this.playBtn.exitStarted ? 255 - this.playBtn.alpha : 245);
     translate(this.playBtn.x, this.playBtn.y);
     rect(0, 0, this.playBtn.w, this.playBtn.h);
+
+    image(testsheet.sprites[1], 0, 0);
 
     fill(0);
     textSize(16);
