@@ -8,6 +8,8 @@ let FONTS = {};
 
 let AUDIO = {};
 
+let testsheet;
+
 function preload() {
     soundFormats('mp3');
     AUDIO['rickroll'] = loadSound('res/audio/copyrighted_music.mp3');
@@ -17,30 +19,11 @@ function preload() {
 
     // WIP
 
-    const sheet = new Spritesheet('test.png');
-    sheet.createSprite('numbers', {
-        count: [
-            {
-                x: 0,
-                y: 0,
-                width: 20,
-                height: 29
-            },
-            {
-                x: 24,
-                y: 0,
-                width: 20,
-                height: 29
-            },
-            {
-                x: 49,
-                y: 0,
-                width: 20,
-                height: 29
-            }
-        ]
-    });
-    console.log('sprites', SPRITES);
+    testsheet = new Spritesheet('test.png');
+
+    testsheet.cropSheet(0, 0, 20, 29);
+    testsheet.cropSheet(24, 0, 20, 29);
+    testsheet.cropSheet(49, 0, 20, 29);
 }
 
 function setup() {
