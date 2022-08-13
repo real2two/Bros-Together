@@ -39,8 +39,12 @@ gameScene.setup = function () {
         for (const { bodyA, bodyB } of p_event.pairs) {
             if ([ bodyA, bodyB ].includes(gameScene.player)) {
                 const other = bodyA === gameScene.player ? bodyB : bodyA;
+
+                if (other && other.killzone) {
+                    return killPlayer();
+                }
                 
-                if (other && other.type && other.type === 'collectable') {
+                if (other && other.is && other.is === 'collectable') {
                     Composite.remove(currentScene.engine.world, other);
                     currentScene.bodies.splice(currentScene.bodies.indexOf(other), 1);
 
@@ -49,7 +53,7 @@ gameScene.setup = function () {
                     continue;
                 }
 
-                if (other === gameScene.ground || [ 'static', 'movable' ].includes(other.type)) gameScene.player.grounded = true;
+                if (other === gameScene.ground || [ 'static', 'movable' ].includes(other.is)) gameScene.player.grounded = true;
             }
         }
     });
@@ -58,7 +62,7 @@ gameScene.setup = function () {
         for (const { bodyA, bodyB } of p_event.pairs) {
             if ([ bodyA, bodyB ].includes(gameScene.player)) {
                 const other = bodyA === gameScene.player ? bodyB : bodyA;
-                if (other === gameScene.ground || [ 'static', 'movable' ].includes(other.type)) {
+                if (other === gameScene.ground || [ 'static', 'movable' ].includes(other.is)) {
                     gameScene.player.firstJump = true;
                     gameScene.player.grounded = false;
                 }
@@ -124,7 +128,7 @@ gameScene.draw = function () {
         push();
 
         if (loadedBodies.includes(b)) {
-            switch (b.type) {
+            switch (b.is) {
                 case 'static':
                     noFill();
                     stroke(255);
@@ -193,11 +197,17 @@ gameScene.keyPressed = function name() {
         case 82: // `R`
             console.log("Resetting...");
 
-            gameScene.player.lastDeathPosition = { ...gameScene.player.position };
-
-            Body.setPosition(gameScene.player, { x: 0, y: 0 });
-            Body.setVelocity(gameScene.player, { x: 0, y: 0 });
-            Body.setAngularVelocity(gameScene.player, 0);
+            killPlayer();
             break;
     }
+}
+
+function killPlayer() {
+    gameScene.player.lastDeathPosition = { ...gameScene.player.position };
+
+    Body.setPosition(gameScene.player, { x: 0, y: 0 });
+    Body.setVelocity(gameScene.player, { x: 0, y: 0 });
+    Body.setAngularVelocity(gameScene.player, 0);
+
+    loadLevel(loadedLevel);
 }

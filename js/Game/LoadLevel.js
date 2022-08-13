@@ -36,26 +36,25 @@ function createBlock(p_px, p_py, p_sx, p_sy, p_opt) {
 */
 
 const loadedLevel = { blocks: [] };
-const loadedBodies = [];
+let loadedBodies = [];
 
 function loadLevel({ blocks }) {
-    loadedLevel.blocks = [];
+    loadedLevel.blocks = blocks;
 
-    for (let i = 0; i < loadedBodies.length; ++i) {
-        Composite.remove(currentScene.engine.world, loadedBodies[i]);
-        currentScene.bodies.splice(currentScene.bodies.indexOf(loadedBodies[i]), 1);
+    Composite.remove(currentScene.engine.world, loadedBodies);
+    for (const body of loadedBodies) {
+        currentScene.bodies.splice(currentScene.bodies.indexOf(body), 1);
     }
+    loadedBodies = [];
 
     for (const block of blocks) {
         addBlock(block);
     }
 }
 
-function addBlock({ type, x, y, width, height, properties = {} }) {
-    loadedLevel.blocks.push({ type, x, y, width, height });
-
+function addBlock({ is, x, y, width, height, killzone = false, properties = {} }) {
     let block;
-    switch (type) {
+    switch (is) {
         case 'static':
             block = createBlock(x, y, width, height, { isStatic: true, ...properties });
             break;
@@ -67,6 +66,9 @@ function addBlock({ type, x, y, width, height, properties = {} }) {
             break;
     }
 
-    block.type = type;
+    block.is = is;
+    block.killzone = killzone;
+
+    console.log(block)
     loadedBodies.push(block);
 }
