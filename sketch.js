@@ -97,7 +97,7 @@ function windowResized() {
     cy = height / 2;
 }
 
-function keyPressed() { currentScene.keyPressed(); }
-function mousePressed() { currentScene.mousePressed(); }
+function keyPressed() { if (currentScene) currentScene.keyPressed(); }
+function mousePressed() { if (currentScene) currentScene.mousePressed(); }
 //#endregion
 

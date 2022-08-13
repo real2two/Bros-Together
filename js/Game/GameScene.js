@@ -192,11 +192,12 @@ gameScene.keyPressed = function name() {
 
         case 82: // `R`
             console.log("Resetting...");
-            Body.setPosition(this.player, { x: 0, y: 0 });
-            Body.setVelocity(this.player, { x: 0, y: 0 });
-            Body.setAngularVelocity(this.player, { x: 0, y: 0 });
-            this.player.lastDeathPosition = this.player.position;
-            break;
 
+            gameScene.player.lastDeathPosition = { ...gameScene.player.position };
+
+            Body.setPosition(gameScene.player, { x: 0, y: 0 });
+            Body.setVelocity(gameScene.player, { x: 0, y: 0 });
+            Body.setAngularVelocity(gameScene.player, 0);
+            break;
     }
 }
