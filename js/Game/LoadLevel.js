@@ -43,7 +43,9 @@ function loadLevel({ blocks }) {
 
     Composite.remove(currentScene.engine.world, loadedBodies);
     for (const body of loadedBodies) {
-        currentScene.bodies.splice(currentScene.bodies.indexOf(body), 1);
+        if (currentScene.bodies.indexOf(body) !== -1) {
+            currentScene.bodies.splice(currentScene.bodies.indexOf(body), 1);
+        }
     }
     loadedBodies = [];
 
