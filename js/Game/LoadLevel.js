@@ -42,6 +42,8 @@ function loadLevel({ start_pos = { x: 0, y: 0 }, blocks }) {
     loadedLevel.start_pos = start_pos;
     loadedLevel.blocks = blocks;
 
+    Composite.remove(currentScene.engine.world, loadedBodies);
+    
     for (const body of loadedBodies) {
         if (currentScene.bodies.indexOf(body) !== -1) {
             body.removed = true;
@@ -50,7 +52,6 @@ function loadLevel({ start_pos = { x: 0, y: 0 }, blocks }) {
     }
 
     loadedBodies = [];
-    Composite.remove(currentScene.engine.world, loadedBodies);
 
     for (const block of blocks) {
         addBlock(block);
