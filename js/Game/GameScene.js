@@ -102,6 +102,12 @@ gameScene.draw = function () {
     for (let b of this.bodies) {
         push();
         beginShape(TESS);
+        
+        if (loadedObjects.includes(b)) {
+            noFill();
+            stroke(255)
+        }
+        
         for (let v of b.vertices)
             vertex(v.x, v.y);
         endShape(CLOSE);
@@ -136,7 +142,7 @@ gameScene.drawUi = function () {
 }
 
 gameScene.mousePressed = function () {
-    //SOUNDS["rickroll"].play();
+    //SOUNDS["Rickroll"].play();
 }
 
 gameScene.keyPressed = function name() {
