@@ -60,7 +60,7 @@ gameScene.setup = function () {
         for (const { bodyA, bodyB } of p_event.pairs) {
             if ([ bodyA, bodyB ].includes(gameScene.player)) {
                 const other = bodyA === gameScene.player ? bodyB : bodyA;
-                if ([ 'static', 'movable' ].includes(other.is)) {
+                if ([ 'static', 'movable' ].includes(other.is) && !other.removed) {
                     gameScene.player.firstJump = true;
                     gameScene.player.grounded = false;
                 }

@@ -42,24 +42,26 @@ function loadLevel({ start_pos = { x: 0, y: 0 }, blocks }) {
     loadedLevel.start_pos = start_pos;
     loadedLevel.blocks = blocks;
 
-    Composite.remove(currentScene.engine.world, loadedBodies);
     for (const body of loadedBodies) {
         if (currentScene.bodies.indexOf(body) !== -1) {
+            body.removed = true;
             currentScene.bodies.splice(currentScene.bodies.indexOf(body), 1);
         }
     }
+
     loadedBodies = [];
+    Composite.remove(currentScene.engine.world, loadedBodies);
 
     for (const block of blocks) {
         addBlock(block);
     }
 
-    gameScene.player.grounded = false;
-    gameScene.player.firstJump = false;
-
     Body.setPosition(gameScene.player, start_pos);
     Body.setVelocity(gameScene.player, { x: 0, y: 0 });
     Body.setAngularVelocity(gameScene.player, 0);
+
+    gameScene.player.grounded = false;
+    gameScene.player.firstJump = false;
 }
 
 function addBlock({ is, x, y, width, height, killzone = false, properties = {} }) {
