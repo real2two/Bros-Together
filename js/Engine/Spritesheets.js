@@ -57,5 +57,6 @@ class Spritesheet {
 }
 
 function renderSprite(id, animation, frame, x = 0, y = 0) {
+    if (!SPRITES[id]) return console.warn('Cannot find:', id, animation, frame);
     image(SPRITES[id][animation][frame], x, y);
 }
