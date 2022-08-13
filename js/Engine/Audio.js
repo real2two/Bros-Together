@@ -8,3 +8,10 @@ async function loadAudio(id, path) {
         });
     });
 }
+
+function clearAudio() {
+    for (const [ id, audio ] of Object.entries(AUDIO)) {
+        audio.stop();
+        delete AUDIO[id]
+    }
+}
