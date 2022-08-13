@@ -28,11 +28,9 @@ gameScene.setup = function () {
     this.player.firstJump = false;
     Body.setMass(this.player, 25);
     Body.setInertia(this.player, Infinity);
-    this.ground = createBlock(0, 72, 768, 20, {
-        isStatic: true,
-        // Useless! The friction is STILL a lot...
-        frictionStatic: pow(8, -5)
-    });
+    
+    // load level
+    loadLevel(loadedLevel);
 
     //#region: Player Grounding.
     Events.on(this.engine, "collisionStart", function (p_event) {
@@ -53,7 +51,7 @@ gameScene.setup = function () {
                     continue;
                 }
 
-                if (other === gameScene.ground || [ 'static', 'movable' ].includes(other.is)) gameScene.player.grounded = true;
+                if ([ 'static', 'movable' ].includes(other.is)) gameScene.player.grounded = true;
             }
         }
     });
@@ -62,7 +60,7 @@ gameScene.setup = function () {
         for (const { bodyA, bodyB } of p_event.pairs) {
             if ([ bodyA, bodyB ].includes(gameScene.player)) {
                 const other = bodyA === gameScene.player ? bodyB : bodyA;
-                if (other === gameScene.ground || [ 'static', 'movable' ].includes(other.is)) {
+                if ([ 'static', 'movable' ].includes(other.is)) {
                     gameScene.player.firstJump = true;
                     gameScene.player.grounded = false;
                 }

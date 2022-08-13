@@ -6,6 +6,13 @@
     "blocks": [
         {
             "is": "static",
+            "x": 0,
+            "y": 72,
+            "width": 768,
+            "height": 20
+        },
+        {
+            "is": "static",
             "x": -100,
             "y": 0,
             "width": 50,

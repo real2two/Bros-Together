@@ -35,7 +35,7 @@ function createBlock(p_px, p_py, p_sx, p_sy, p_opt) {
 }
 */
 
-const loadedLevel = { blocks: [] };
+const loadedLevel = { start_pos: { x: 0, y: 0 }, blocks: [ { is: 'static', x: 0, y: 72, width: 768, height: 20 } ] };
 let loadedBodies = [];
 
 function loadLevel({ start_pos = { x: 0, y: 0 }, blocks }) {
