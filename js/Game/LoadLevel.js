@@ -79,9 +79,7 @@ function loadLevel({ start_pos = { x: 0, y: 0 }, sprites = [], blocks, recording
     gameScene.player.firstJump = false;
 
     if (recording) {
-        if ('lasts' in recording === false || 'actions' in recording === false) return;
-        if (recording.actions === null) return;
-
+        if (typeof recording.lasts !== 'number' || !Array.isArray(recording.actions)) return;
         return playRecording(recording);
     }
 }

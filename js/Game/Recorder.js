@@ -60,6 +60,8 @@ function playRecording({ actions, lasts }) {
     stopPlayingRecording(true);
 
     for (const { when, press, hold } of actions) {
+        if (typeof when !== 'number') when = 0;
+
         movement_intervals.push(
             setTimeout(() => {
                 switch(press) {
