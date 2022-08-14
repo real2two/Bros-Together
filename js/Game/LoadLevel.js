@@ -24,7 +24,7 @@ async function cacheLevels() {
 async function loadLevelByID(id) {
     stopDebugLevel();
 
-    if (!CACHED_LEVELS[id]) return alert(`Cannot find level with the provided ID. (${id})`)
+    if (!CACHED_LEVELS[id]) id = MAX_LEVELS; //return alert(`Cannot find level with the provided ID. (${id})`)
     loadLevel(CACHED_LEVELS[id])
 
     /*
