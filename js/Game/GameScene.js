@@ -108,7 +108,7 @@ gameScene.update = function () {
 
             // `W` / jumping is handled in the `testScene.keyPressed()` function.
             // Here we handle the sides:
-            if (!playing_recording && keyIsDown(65) || playing_recording && holding['a']) { // a
+            if (!loading_level && !playing_recording && keyIsDown(65) || playing_recording && holding['a']) { // a
                 logMovement('a', true);
 
                 Body.applyForce(this.player, this.player.position, Vector.create(-0.01, 0));
@@ -120,7 +120,7 @@ gameScene.update = function () {
                 logMovement('a', false);
             }
 
-            if (!playing_recording && keyIsDown(68) || playing_recording && holding['d']) { // d
+            if (!loading_level && !playing_recording && keyIsDown(68) || playing_recording && holding['d']) { // d
                 logMovement('d', true);
 
                 Body.applyForce(this.player, this.player.position, Vector.create(0.01, 0));
@@ -235,7 +235,7 @@ gameScene.mousePressed = function () {
 let forces = {};
 
 gameScene.keyPressed = function name() {
-    if (playing_recording) return;
+    if (loading_level || playing_recording) return;
     
     switch (keyCode) {
         case 87:
@@ -256,7 +256,9 @@ function killPlayer() {
     loadLevel(loadedLevel);
 }
 
-function nextLevel() {
+let loading_level = false;
+
+async function nextLevel() {
     stopRecording();
 
     gameScene.player.lastDeathPosition = null;
@@ -264,9 +266,15 @@ function nextLevel() {
     if (old_level_data) {
         loadLevel(loadedLevel);
     } else {
-        loadLevelByID(++level);
+        if (loading_level) return;
+
+        loading_level = true;
+
+        ++level;
+        await loadLevelByID(level);
+
+        loading_level = false;
     }
-    
 }
 
 function jump() {

@@ -3,8 +3,8 @@ async function loadLevelByID(id) {
     stopDebugLevel();
 
     try {
-        const res = await fetch(`/res/levels/${id}.json`);
-        loadLevel(await res.json());
+        const res = await fetch(`res/levels/${id}.json`);
+        return loadLevel(await res.json());
     } catch(err) {
         alert('Failed to load level.');
     }

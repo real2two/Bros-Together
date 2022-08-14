@@ -9,7 +9,7 @@ function startLevelDebug(level_id, enable_errors = false) {
     let first_load = true;
 
     level_debug_interval = setInterval(async () => {
-        const res = await fetch(`/res/levels/${level_id}.json`);
+        const res = await fetch(`res/levels/${level_id}.json`);
         
         let level_data;
         let level;

@@ -7,7 +7,7 @@ let pfocused, winFocus = true, pwinFocus = true, docFocus = true, pdocFocus;
 let visible_fixed;
 
 // Assets:
-let FONT_PATHS = ["../res/Sono-Regular.ttf"];
+let FONT_PATHS = ["res/Sono-Regular.ttf"];
 let FONTS = {};
 let SOUNDS = {};
 let testsheet, testImage;
@@ -17,7 +17,7 @@ let SPRITES = {};
 
 function preload() {
     soundFormats('mp3');
-    loadAudio("rickroll");
+    loadAudio("Rickroll");
 
     for (let f of FONT_PATHS)
         FONTS[f] = loadFont(f);
