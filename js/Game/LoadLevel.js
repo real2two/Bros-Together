@@ -1,4 +1,4 @@
-const MAX_LEVELS = 4;
+const MAX_LEVELS = 13;
 const CACHED_LEVELS = {};
 
 let level = 1;
@@ -26,7 +26,15 @@ async function loadLevelByID(id) {
 
     if (!CACHED_LEVELS[id]) id = MAX_LEVELS; //return alert(`Cannot find level with the provided ID. (${id})`)
 
-    if (id === MAX_LEVELS) document.getElementById('debug').style.display = 'block';
+    CACHED_LEVELS[MAX_LEVELS].sprites[1] = {
+        id: points >= 10 ? "map_editor" : "how_to_unlock",
+        x: 0,
+        y: 0,
+        width: 240,
+        height: 135
+    } 
+
+    if (id === MAX_LEVELS && points >= 10) document.getElementById('debug').style.display = 'block';
     loadLevel(CACHED_LEVELS[id]);
 
     if (document.getElementById('debug').style.display !== 'none') {
