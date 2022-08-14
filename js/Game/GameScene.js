@@ -86,7 +86,8 @@ gameScene.update = function () {
 
     //#region Tab switch:
     // The user can switch tabs, but cannot change applications:
-    if (!!focused && !!docFocus && !!winFocus && !!document.hasFocus() && document.visibilityState === 'visible' && !visible_fixed) {
+    if (!!focused && !!docFocus && !!winFocus &&
+        !!document.hasFocus() && document.visibilityState === 'visible') {
         Engine.update(this.engine, deltaTime > 64 ? 64 : deltaTime);
 
         /*
@@ -100,29 +101,32 @@ gameScene.update = function () {
                 x: 640 / 2,
                 y: this.player.position.y > cy ? cy : this.player.position.y
             });
-        */
+            */
         if (this.player.position.x > 640 / 2 || this.player.position.x < -640 / 2) {
             nextLevel();
+            console.log(JSON.stringify(forces));
         }
         //#endregion
 
         // `W` / jumping is handled in the `testScene.keyPressed()` function.
         // Here we handle the sides:
-        if (keyIsDown(65))
+        if (keyIsDown(65)) {
             Body.applyForce(this.player, this.player.position, Vector.create(-0.01, 0));
-        if (keyIsDown(68))
-            Body.applyForce(this.player, this.player.position, Vector.create(0.01, 0));
-
-        // `S` key:
-        //if (keyIsDown(83))
-        //Body.applyForce(this.player, this.player.position, Vector.create(0, 0.01));
-    } else {
-        if (document.visibilityState === 'visible' && !visible_fixed) {
-            visible_fixed = performance.now() + deltaTime;
+            forces["frame"] = frameCount;
+            forces["frame"]["x"] = -0.01;
+            forces["frame"]["y"] = 0;
         }
-
-        if (visible_fixed && performance.now() > visible_fixed) visible_fixed = null;
+        if (keyIsDown(68)) {
+            Body.applyForce(this.player, this.player.position, Vector.create(0.01, 0));
+            forces["frame"] = frameCount;
+            forces["frame"]["x"] = 0.01;
+            forces["frame"]["y"] = 0;
+        }
     }
+
+    // `S` key:
+    //if (keyIsDown(83))
+    //Body.applyForce(this.player, this.player.position, Vector.create(0, 0.01));
 }
 
 //#region `gameScene.draw()`:
@@ -188,15 +192,23 @@ gameScene.mousePressed = function () {
     //SOUNDS["Rickroll"].play();
 }
 
+let forces = {};
+
 gameScene.keyPressed = function name() {
     switch (keyCode) {
         case 87:
             if (this.player.grounded) {
                 Body.applyForce(this.player, this.player.position, Vector.create(0, -0.3));
+                forces["frame"] = frameCount;
+                forces["frame"]["x"] = 0;
+                forces["frame"]["y"] = -0.3;
                 this.player.firstJump = false;
             } else if (this.player.firstJump) {
                 // Double jump:
                 Body.applyForce(this.player, this.player.position, Vector.create(0, -0.28));
+                forces["frame"] = frameCount;
+                forces["frame"]["x"] = 0;
+                forces["frame"]["y"] = -0.28;
                 this.player.firstJump = false;
             }
             break;

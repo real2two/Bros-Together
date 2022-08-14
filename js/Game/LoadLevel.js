@@ -4,18 +4,18 @@ async function loadLevelByID(id) {
     loadLevel(await res.json());
 }
 
-const loadedLevel = { start_pos: { x: 0, y: 0 }, blocks: [ { is: 'static', x: 0, y: 72, width: 768, height: 20 } ] };
+const loadedLevel = { start_pos: { x: 0, y: 0 }, blocks: [{ is: 'static', x: 0, y: 72, width: 768, height: 20 }] };
 let loadedBodies = [];
 
 function loadLevel({ start_pos = { x: 0, y: 0 }, blocks }) {
     if (!start_pos.x) start_pos.x = 0;
     if (!start_pos.y) start_pos.y = 0;
-    
+
     loadedLevel.start_pos = start_pos;
     loadedLevel.blocks = blocks;
 
     Composite.remove(currentScene.engine.world, loadedBodies);
-    
+
     for (const body of loadedBodies) {
         if (currentScene.bodies.indexOf(body) !== -1) {
             body.removed = true;
@@ -47,7 +47,7 @@ function addBlock({ is = 'static', x = 0, y = 0, width = 10, height = 10, killzo
             block = createBlock(x, y, width, height, properties);
             break;
         case 'collectable':
-            block = createBlock(x, y, width, height, properties);
+            block = createBlock(x, y, width, height, { restitution: 0, mass: 0, inverseMass: 0, ...properties });
             break;
     }
 
