@@ -1,44 +1,16 @@
-document.getElementById('upload').addEventListener('change', function() {
-    if (!this.files.length) return;
-
-    const reader = new FileReader();
-    reader.onload = () => {
-        let data;
-        try {
-            data = JSON.parse(reader.result);
-        } catch(err) {
-            console.error(err);
-            return alert('Could not parse JSON.');
-        }
-
-        loadLevel(data);
-    };
-
-    reader.readAsText(this.files[0]);
-});
-
-/*
-function createBlock(p_px, p_py, p_sx, p_sy, p_opt) {
-    let body = Bodies.rectangle(p_px, p_py, p_sx, p_sy, p_opt);
-
-    if (currentScene.bodies)
-        currentScene.bodies.push(body);
-
-    //if (currentScene.blocks)
-    //currentScene.blocks.push(this.body);
-
-    if (currentScene.engine.world === undefined)
-        throw new Error("Current scene does not have a `js` Engine called `engine`!");
-
-    Composite.add(currentScene.engine.world, body);
-    return body;
+// FOR PRODUCTION:
+async function loadLevelByID(id) {
+    const res = await fetch(`/res/levels/${id}.json`);
+    loadLevel(await res.json());
 }
-*/
 
 const loadedLevel = { start_pos: { x: 0, y: 0 }, blocks: [ { is: 'static', x: 0, y: 72, width: 768, height: 20 } ] };
 let loadedBodies = [];
 
 function loadLevel({ start_pos = { x: 0, y: 0 }, blocks }) {
+    if (!start_pos.x) start_pos.x = 0;
+    if (!start_pos.y) start_pos.y = 0;
+    
     loadedLevel.start_pos = start_pos;
     loadedLevel.blocks = blocks;
 
@@ -65,7 +37,7 @@ function loadLevel({ start_pos = { x: 0, y: 0 }, blocks }) {
     gameScene.player.firstJump = false;
 }
 
-function addBlock({ is, x, y, width, height, killzone = false, properties = {} }) {
+function addBlock({ is = 'static', x = 0, y = 0, width = 10, height = 10, killzone = false, properties = {} }) {
     let block;
     switch (is) {
         case 'static':
