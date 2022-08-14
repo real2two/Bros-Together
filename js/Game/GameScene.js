@@ -90,6 +90,8 @@ gameScene.update = function () {
         !!document.hasFocus() && document.visibilityState === 'visible') {
 
         if (!!focused && !!docFocus && !!winFocus && !!document.hasFocus() && document.visibilityState === 'visible') {
+            if (recording && !recording_since) recording_since = performance.now();
+
             Engine.update(this.engine, deltaTime > 64 ? 64 : deltaTime);
 
             /*
@@ -104,35 +106,46 @@ gameScene.update = function () {
                     y: this.player.position.y > cy ? cy : this.player.position.y
                 });
                 */
-            if (this.player.position.x > 640 / 2 || this.player.position.x < -640 / 2) {
-                nextLevel();
-                console.log(JSON.stringify(forces));
-            }
+
             //#endregion
 
             // `W` / jumping is handled in the `testScene.keyPressed()` function.
             // Here we handle the sides:
-            if (keyIsDown(65)) {
+            if (!playing_recording && keyIsDown(65) || playing_recording && holding['a']) { // a
+                logMovement('a', true);
+
                 Body.applyForce(this.player, this.player.position, Vector.create(-0.01, 0));
 
                 forces["frame"] = frameCount;
                 forces["frame"]["x"] = -0.01;
                 forces["frame"]["y"] = 0;
+            } else {
+                logMovement('a', false);
             }
-            if (keyIsDown(68)) {
+
+            if (!playing_recording && keyIsDown(68) || playing_recording && holding['d']) { // d
+                logMovement('d', true);
+
                 Body.applyForce(this.player, this.player.position, Vector.create(0.01, 0));
                 forces["frame"] = frameCount;
                 forces["frame"]["x"] = 0.01;
                 forces["frame"]["y"] = 0;
+            } else {
+                logMovement('d', false);
             }
-
-            if (keyIsDown(68))
-                Body.applyForce(this.player, this.player.position, Vector.create(0.01, 0));
 
             // `S` key:
             //if (keyIsDown(83))
             //Body.applyForce(this.player, this.player.position, Vector.create(0, 0.01));
 
+            if (this.player.position.x > 640 / 2 || this.player.position.x < -640 / 2) {
+                if (playing_recording) {
+                    stopPlayingRecording();
+                } else {
+                    nextLevel();
+                    console.log(JSON.stringify(forces));
+                }
+            }
         }
 
         // `S` key:
@@ -207,22 +220,12 @@ gameScene.mousePressed = function () {
 let forces = {};
 
 gameScene.keyPressed = function name() {
+    if (playing_recording) return;
+    
     switch (keyCode) {
         case 87:
-            if (this.player.grounded) {
-                Body.applyForce(this.player, this.player.position, Vector.create(0, -0.3));
-                forces["frame"] = frameCount;
-                forces["frame"]["x"] = 0;
-                forces["frame"]["y"] = -0.3;
-                this.player.firstJump = false;
-            } else if (this.player.firstJump) {
-                // Double jump:
-                Body.applyForce(this.player, this.player.position, Vector.create(0, -0.28));
-                forces["frame"] = frameCount;
-                forces["frame"]["x"] = 0;
-                forces["frame"]["y"] = -0.28;
-                this.player.firstJump = false;
-            }
+            logMovement('w');
+            jump();
             break;
 
         case 82: // `R`
@@ -241,6 +244,26 @@ function killPlayer() {
 function nextLevel() {
     // ++level;
 
+    stopRecording();
+
     gameScene.player.lastDeathPosition = null;
     loadLevel(loadedLevel);
+    
+}
+
+function jump() {
+    if (gameScene.player.grounded) {
+        Body.applyForce(gameScene.player, gameScene.player.position, Vector.create(0, -0.3));
+        forces["frame"] = frameCount;
+        forces["frame"]["x"] = 0;
+        forces["frame"]["y"] = -0.3;
+        gameScene.player.firstJump = false;
+    } else if (gameScene.player.firstJump) {
+        // Double jump:
+        Body.applyForce(gameScene.player, gameScene.player.position, Vector.create(0, -0.28));
+        forces["frame"] = frameCount;
+        forces["frame"]["x"] = 0;
+        forces["frame"]["y"] = -0.28;
+        gameScene.player.firstJump = false;
+    }
 }

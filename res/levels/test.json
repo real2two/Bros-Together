@@ -49,11 +49,5 @@
             }
         }
     ],
-    "ai_points": [
-        {
-            "x": -100,
-            "y": 0
-        },
-        {}
-    ]
+    "recording": [{"when":366.70000000018626,"press":"d","hold":true},{"when":583.5,"press":"d","hold":false},{"when":916.7000000001863,"press":"a","hold":true},{"when":1016.6000000000931,"press":"a","hold":false},{"when":1817.2000000001863,"press":"d","hold":true},{"when":2740.8000000002794,"press":"w"}]
 }

@@ -7,7 +7,7 @@ async function loadLevelByID(id) {
 const loadedLevel = { start_pos: { x: 0, y: 0 }, blocks: [{ is: 'static', x: 0, y: 72, width: 768, height: 20 }] };
 let loadedBodies = [];
 
-function loadLevel({ start_pos = { x: 0, y: 0 }, blocks }) {
+function loadLevel({ start_pos = { x: 0, y: 0 }, blocks, recording }) {
     if (!start_pos.x) start_pos.x = 0;
     if (!start_pos.y) start_pos.y = 0;
 
@@ -35,6 +35,8 @@ function loadLevel({ start_pos = { x: 0, y: 0 }, blocks }) {
 
     gameScene.player.grounded = false;
     gameScene.player.firstJump = false;
+
+    if (recording) return playRecording(recording);
 }
 
 function addBlock({ is = 'static', x = 0, y = 0, width = 10, height = 10, killzone = false, properties = {} }) {
