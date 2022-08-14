@@ -59,9 +59,7 @@ function playRecording(recording) {
     playing_recording = true;
     killPlayer();
 
-    let i = 0;
-    for (const record of recording) {
-        const { when, press, hold } = record;
+    for (const { when, press, hold } of recording) {
         setTimeout(() => {
             switch(press) {
                 case 'w':
@@ -72,12 +70,7 @@ function playRecording(recording) {
                     holding[press] = hold;
                     break;
             }
-
-            if (record === recording[recording.length - 1]) {
-                stopPlayingRecording();
-            }
         }, when);
-        ++i;
     }
 }
 
