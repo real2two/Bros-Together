@@ -1,5 +1,7 @@
 // FOR PRODUCTION:
 async function loadLevelByID(id) {
+    stopDebugLevel();
+    
     const res = await fetch(`/res/levels/${id}.json`);
     loadLevel(await res.json());
 }
