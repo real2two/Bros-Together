@@ -28,20 +28,20 @@ gameScene.setup = function () {
     this.player.firstJump = false;
     Body.setMass(this.player, 25);
     Body.setInertia(this.player, Infinity);
-    
+
     // load level
     loadLevel(loadedLevel);
 
-    //#region: Player Grounding.
+    //#region Player Grounding.
     Events.on(this.engine, "collisionStart", function (p_event) {
         for (const { bodyA, bodyB } of p_event.pairs) {
-            if ([ bodyA, bodyB ].includes(gameScene.player)) {
+            if ([bodyA, bodyB].includes(gameScene.player)) {
                 const other = bodyA === gameScene.player ? bodyB : bodyA;
 
                 if (other && other.killzone) {
                     return killPlayer();
                 }
-                
+
                 if (other && other.is && other.is === 'collectable') {
                     Composite.remove(currentScene.engine.world, other);
                     currentScene.bodies.splice(currentScene.bodies.indexOf(other), 1);
@@ -51,16 +51,16 @@ gameScene.setup = function () {
                     continue;
                 }
 
-                if ([ 'static', 'movable' ].includes(other.is)) gameScene.player.grounded = true;
+                if (['static', 'movable'].includes(other.is)) gameScene.player.grounded = true;
             }
         }
     });
 
     Events.on(this.engine, "collisionEnd", function (p_event) {
         for (const { bodyA, bodyB } of p_event.pairs) {
-            if ([ bodyA, bodyB ].includes(gameScene.player)) {
+            if ([bodyA, bodyB].includes(gameScene.player)) {
                 const other = bodyA === gameScene.player ? bodyB : bodyA;
-                if ([ 'static', 'movable' ].includes(other.is) && !other.removed) {
+                if (['static', 'movable'].includes(other.is) && !other.removed) {
                     gameScene.player.firstJump = true;
                     gameScene.player.grounded = false;
                 }
