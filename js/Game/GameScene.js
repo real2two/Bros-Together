@@ -88,45 +88,57 @@ gameScene.update = function () {
     // The user can switch tabs, but cannot change applications:
     if (!!focused && !!docFocus && !!winFocus &&
         !!document.hasFocus() && document.visibilityState === 'visible') {
-        Engine.update(this.engine, deltaTime > 64 ? 64 : deltaTime);
 
-        /*
-        if (this.player.position.x > 640 / 2)
-            Body.setPosition(this.player, {
-                x: -640 / 2,
-                y: this.player.position.y > cy ? cy : this.player.position.y
-            });
-        else if (this.player.position.x < -640 / 2)
-            Body.setPosition(this.player, {
-                x: 640 / 2,
-                y: this.player.position.y > cy ? cy : this.player.position.y
-            });
-            */
-        if (this.player.position.x > 640 / 2 || this.player.position.x < -640 / 2) {
-            nextLevel();
-            console.log(JSON.stringify(forces));
-        }
-        //#endregion
+        if (!!focused && !!docFocus && !!winFocus && !!document.hasFocus() && document.visibilityState === 'visible') {
+            Engine.update(this.engine, deltaTime > 64 ? 64 : deltaTime);
 
-        // `W` / jumping is handled in the `testScene.keyPressed()` function.
-        // Here we handle the sides:
-        if (keyIsDown(65)) {
-            Body.applyForce(this.player, this.player.position, Vector.create(-0.01, 0));
-            forces["frame"] = frameCount;
-            forces["frame"]["x"] = -0.01;
-            forces["frame"]["y"] = 0;
+            /*
+            if (this.player.position.x > 640 / 2)
+                Body.setPosition(this.player, {
+                    x: -640 / 2,
+                    y: this.player.position.y > cy ? cy : this.player.position.y
+                });
+            else if (this.player.position.x < -640 / 2)
+                Body.setPosition(this.player, {
+                    x: 640 / 2,
+                    y: this.player.position.y > cy ? cy : this.player.position.y
+                });
+                */
+            if (this.player.position.x > 640 / 2 || this.player.position.x < -640 / 2) {
+                nextLevel();
+                console.log(JSON.stringify(forces));
+            }
+            //#endregion
+
+            // `W` / jumping is handled in the `testScene.keyPressed()` function.
+            // Here we handle the sides:
+            if (keyIsDown(65)) {
+                Body.applyForce(this.player, this.player.position, Vector.create(-0.01, 0));
+
+                forces["frame"] = frameCount;
+                forces["frame"]["x"] = -0.01;
+                forces["frame"]["y"] = 0;
+            }
+            if (keyIsDown(68)) {
+                Body.applyForce(this.player, this.player.position, Vector.create(0.01, 0));
+                forces["frame"] = frameCount;
+                forces["frame"]["x"] = 0.01;
+                forces["frame"]["y"] = 0;
+            }
+
+            if (keyIsDown(68))
+                Body.applyForce(this.player, this.player.position, Vector.create(0.01, 0));
+
+            // `S` key:
+            //if (keyIsDown(83))
+            //Body.applyForce(this.player, this.player.position, Vector.create(0, 0.01));
+
         }
-        if (keyIsDown(68)) {
-            Body.applyForce(this.player, this.player.position, Vector.create(0.01, 0));
-            forces["frame"] = frameCount;
-            forces["frame"]["x"] = 0.01;
-            forces["frame"]["y"] = 0;
-        }
+
+        // `S` key:
+        //if (keyIsDown(83))
+        //Body.applyForce(this.player, this.player.position, Vector.create(0, 0.01));
     }
-
-    // `S` key:
-    //if (keyIsDown(83))
-    //Body.applyForce(this.player, this.player.position, Vector.create(0, 0.01));
 }
 
 //#region `gameScene.draw()`:
