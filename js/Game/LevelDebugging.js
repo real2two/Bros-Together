@@ -29,6 +29,8 @@ function startLevelDebug(level_id, enable_errors = false) {
     
         if (old_level_data === level_data) return;
         old_level_data = level_data;
+
+        delete level.recording;
     
         loadLevel(level);
     }, 100);
