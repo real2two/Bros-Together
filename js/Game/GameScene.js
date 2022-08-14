@@ -183,6 +183,13 @@ gameScene.draw = function () {
             vertex(v.x, v.y);
         endShape(CLOSE);
 
+        if (this.player === b && playing_recording) {
+            textAlign(CENTER);
+            fill(0);
+            textSize(15);
+            text('AI', b.vertices[0].x + 10, b.vertices[0].y + 15);
+        }
+
         pop();
     }
 };
