@@ -16,8 +16,11 @@
 </head>
 
 <body>
-    <input id="level_id" placeholder="level id">
-    <button onclick="playRecordedRecording()">Play recording.</button>
+    <div id="debug" style="display: none;">
+        <input id="level_id" placeholder="level id">
+        <button onclick="playRecordedRecording()">Play recording.</button>
+        <textarea id="level_data"></textarea>
+    </div>
 
     <script src="js/Engine/PhysicsUtils.js"></script>
     <script src="js/Engine/Loose.js"></script>
@@ -35,6 +38,7 @@
     <script src="js/Game/LoadLevel.js"></script>
     <script src="js/Game/LevelDebugging.js"></script>
     <script src="js/Game/Recorder.js"></script>
+    <script src="js/Game/MapEditor.js"></script>
 
     <script src="sketch.js"></script>
 

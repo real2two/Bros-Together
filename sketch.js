@@ -1,3 +1,9 @@
+const PRODUCTION = !window.location.href.startsWith('http://localhost');
+if (PRODUCTION === false) {
+    document.getElementById('level_data').style.display = 'none';
+    document.getElementById('debug').style.display = 'block';
+}
+
 let cx = 0.0, cy = 0.0;
 let currentScene;
 let gl;
@@ -27,6 +33,7 @@ function preload() {
 
     SPRITES['controls'] = new Spritesheet('controls.png');
     SPRITES['how_to_win'] = new Spritesheet('how_to_win.png');
+    SPRITES['you_win'] = new Spritesheet('you_win.png');
 }
 
 function setup() {

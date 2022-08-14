@@ -4,6 +4,8 @@ let old_level_data;
 let savedRecording;
 
 function startLevelDebug(level_id, enable_errors = false) {
+    if (PRODUCTION === true) return loadLevelByID(level_id);
+
     stopDebugLevel();
 
     let first_load = true;

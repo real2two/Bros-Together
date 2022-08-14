@@ -1,4 +1,4 @@
-const MAX_LEVELS = 3;
+const MAX_LEVELS = 4;
 const CACHED_LEVELS = {};
 
 let level = 1;
@@ -25,7 +25,11 @@ async function loadLevelByID(id) {
     stopDebugLevel();
 
     if (!CACHED_LEVELS[id]) id = MAX_LEVELS; //return alert(`Cannot find level with the provided ID. (${id})`)
-    loadLevel(CACHED_LEVELS[id])
+
+    if (id === MAX_LEVELS) document.getElementById('debug').style.display = 'block';
+    loadLevel(CACHED_LEVELS[id]);
+
+    if (document.getElementById('debug').style.display !== 'none') document.getElementById('level_data').value = JSON.stringify(CACHED_LEVELS[id], 0, 2);
 
     /*
     try {
@@ -43,8 +47,8 @@ let loadedBodies = [];
 let shown_sprites = [];
 
 function loadLevel({ start_pos = { x: 0, y: 0 }, sprites = [], blocks, recording }) {
-    if (!start_pos.x) start_pos.x = 0;
-    if (!start_pos.y) start_pos.y = 0;
+    if (typeof start_pos.x !== 'number') start_pos.x = 0;
+    if (typeof start_pos.y !== 'number') start_pos.y = 0;
 
     loadedLevel.start_pos = start_pos;
     loadedLevel.blocks = blocks;
@@ -84,22 +88,25 @@ function loadLevel({ start_pos = { x: 0, y: 0 }, sprites = [], blocks, recording
 
 function addBlock({ after_recording, is = 'static', x = 0, y = 0, width = 10, height = 10, killzone = false, properties = {} }) {
     if (playing_recording && after_recording === true) return;
+    if (typeof x !== 'number' || typeof y !== 'number' || typeof width !== 'number' || typeof height !== 'number') return;
     
     let block;
     switch (is) {
-        case 'static':
-            block = createBlock(x, y, width, height, { isStatic: true, ...properties });
-            break;
         case 'movable':
             block = createBlock(x, y, width, height, properties);
             break;
         case 'collectable':
             block = createBlock(x, y, width, height, { restitution: 0, mass: 0, inverseMass: 0, ...properties });
             break;
+        case 'static':
+        default:
+            is = 'static';
+            block = createBlock(x, y, width, height, { isStatic: true, ...properties });
+            break;
     }
 
     block.is = is;
-    block.killzone = killzone;
+    block.killzone = !!killzone;
 
     loadedBodies.push(block);
 }

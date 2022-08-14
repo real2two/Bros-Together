@@ -162,15 +162,16 @@ gameScene.draw = function () {
 
         if (loadedBodies.includes(b)) {
             switch (b.is) {
-                case 'static':
-                    noFill();
-                    stroke(255);
-                    break;
                 case 'movable':
                     fill(150);
                     break;
                 case 'collectable':
                     fill('#F4DF4E')
+                    break;
+                case 'static':
+                default:
+                    noFill();
+                    stroke(255);
                     break;
             }
 
@@ -195,7 +196,7 @@ gameScene.draw = function () {
     }
 
     for (let { id, x = 0, y = 0, width, height } of shown_sprites) {
-        if (!id) continue;
+        if (!id || !SPRITES[id] || typeof x !== 'number' || typeof y !== 'number' || typeof width !== 'number' || typeof height !== 'number') continue;
 
         push();
         translate(x, y);
@@ -267,7 +268,7 @@ async function nextLevel() {
 
     gameScene.player.lastDeathPosition = null;
     
-    if (old_level_data) {
+    if (old_level_data || level === MAX_LEVELS) {
         loadLevel(loadedLevel);
     } else {
         if (loading_level) return;
