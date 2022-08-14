@@ -1,4 +1,4 @@
-const PRODUCTION = true //!window.location.href.startsWith('http://localhost');
+const PRODUCTION = !window.location.href.startsWith('http://localhost');
 if (PRODUCTION === false) {
     document.getElementById('level_data').style.display = 'none';
     document.getElementById('debug').style.display = 'block';
