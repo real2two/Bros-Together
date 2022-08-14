@@ -17,6 +17,7 @@ function loadLevel({ start_pos = { x: 0, y: 0 }, sprites = [], blocks, recording
 
     loadedLevel.start_pos = start_pos;
     loadedLevel.blocks = blocks;
+    loadedLevel.sprites = sprites;
 
     shown_sprites = sprites;
 
