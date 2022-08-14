@@ -87,7 +87,7 @@ gameScene.update = function () {
     //#region Tab switch:
     // The user can switch tabs, but cannot change applications:
     if (!!focused && !!docFocus && !!winFocus && !!document.hasFocus() && document.visibilityState === 'visible' && !visible_fixed) {
-        Engine.update(this.engine, deltaTime > 16 ? 16 : deltaTime);
+        Engine.update(this.engine, deltaTime > 64 ? 64 : deltaTime);
 
         /*
         if (this.player.position.x > 640 / 2)
