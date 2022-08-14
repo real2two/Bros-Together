@@ -2,7 +2,7 @@
 
 let gameScene = new Scene();
 
-gameScene.setup = function () {
+gameScene.setup = async function () {
     this.engine = Engine.create();
 
     //this.engine.gravity.scale = pow(10, -4); // Water.
@@ -28,6 +28,10 @@ gameScene.setup = function () {
     this.player.firstJump = false;
     Body.setMass(this.player, 25);
     Body.setInertia(this.player, Infinity);
+
+    // load level
+    await cacheLevels();
+    loadLevelByID(1);
 
     //#region Player Grounding.
     Events.on(this.engine, "collisionStart", function (p_event) {
@@ -73,9 +77,6 @@ gameScene.setup = function () {
         //p_cam.pos.x = sin(millis() * 0.001) * 250;
         //p_cam.center.x = p_cam.pos.x;
     }
-
-    // load level
-    loadLevelByID(1);
 }
 
 gameScene.update = function () {
