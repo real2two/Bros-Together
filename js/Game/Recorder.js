@@ -56,8 +56,8 @@ function stopRecording(log = true) {
 }
 
 function playRecording(recording) {
-    killPlayer();
     playing_recording = true;
+    killPlayer();
 
     for (const { when, press, hold } of recording) {
         setTimeout(() => {
@@ -78,7 +78,7 @@ function stopPlayingRecording() {
     holding.a = false;
     holding.d = false;
 
-    killPlayer();
-
     playing_recording = false;
+
+    killPlayer();
 }

@@ -39,7 +39,9 @@ function loadLevel({ start_pos = { x: 0, y: 0 }, blocks, recording }) {
     if (recording) return playRecording(recording);
 }
 
-function addBlock({ is = 'static', x = 0, y = 0, width = 10, height = 10, killzone = false, properties = {} }) {
+function addBlock({ after_recording, is = 'static', x = 0, y = 0, width = 10, height = 10, killzone = false, properties = {} }) {
+    if (playing_recording && after_recording === true) return;
+    
     let block;
     switch (is) {
         case 'static':
