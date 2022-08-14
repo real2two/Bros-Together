@@ -2,6 +2,7 @@ const PRODUCTION = !window.location.href.startsWith('http://localhost');
 if (PRODUCTION === false) {
     document.getElementById('level_data').style.display = 'none';
     document.getElementById('debug').style.display = 'block';
+    document.getElementById('play_recording').style.display = 'block';
 }
 
 let cx = 0.0, cy = 0.0;

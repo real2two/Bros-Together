@@ -9,9 +9,6 @@ canvas {
 
 input, button, textarea {
   position: absolute;
-}
-
-input, button {
   right: 0;
 }
 

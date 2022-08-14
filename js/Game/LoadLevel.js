@@ -29,7 +29,12 @@ async function loadLevelByID(id) {
     if (id === MAX_LEVELS) document.getElementById('debug').style.display = 'block';
     loadLevel(CACHED_LEVELS[id]);
 
-    if (document.getElementById('debug').style.display !== 'none') document.getElementById('level_data').value = JSON.stringify(CACHED_LEVELS[id], 0, 2);
+    if (document.getElementById('debug').style.display !== 'none') {
+        const level = { ...CACHED_LEVELS[id] };
+        delete level.recording;
+        
+        document.getElementById('level_data').value = JSON.stringify(level, 0, 2);
+    }
 
     /*
     try {
