@@ -1,13 +1,13 @@
 {
     "start_pos": {
         "x": 0,
-        "y": -100
+        "y": 50
     },
     "sprites": [
         {
             "id": "controls",
             "x": 0,
-            "y": 0,
+            "y": -10,
             "width": 240,
             "height": 135
         }
