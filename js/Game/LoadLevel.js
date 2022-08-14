@@ -47,7 +47,12 @@ function loadLevel({ start_pos = { x: 0, y: 0 }, sprites = [], blocks, recording
     gameScene.player.grounded = false;
     gameScene.player.firstJump = false;
 
-    if (recording) return playRecording(recording);
+    if (recording) {
+        if ('lasts' in recording === false || 'actions' in recording === false) return;
+        if (recording.actions === null) return;
+
+        return playRecording(recording);
+    }
 }
 
 function addBlock({ after_recording, is = 'static', x = 0, y = 0, width = 10, height = 10, killzone = false, properties = {} }) {

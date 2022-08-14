@@ -4,6 +4,7 @@ let recording = false;
 let recording_since = null;
 
 let movements = [];
+let movement_intervals = [];
 let holding = {
     a: false,
     d: false
@@ -55,30 +56,41 @@ function stopRecording(log = true) {
     holding.d = false;
 }
 
-function playRecording(recording) {
-    playing_recording = true;
-    killPlayer();
+function playRecording({ actions, lasts }) {
+    stopPlayingRecording(true);
 
-    for (const { when, press, hold } of recording) {
-        setTimeout(() => {
-            switch(press) {
-                case 'w':
-                    jump();
-                    break;
-                case 'a':
-                case 'd':
-                    holding[press] = hold;
-                    break;
-            }
-        }, when);
+    for (const { when, press, hold } of actions) {
+        movement_intervals.push(
+            setTimeout(() => {
+                switch(press) {
+                    case 'w':
+                        jump();
+                        break;
+                    case 'a':
+                    case 'd':
+                        holding[press] = hold;
+                        break;
+                }
+            }, when)
+        );
     }
+
+    movement_intervals.push(
+        setTimeout(() => {
+            stopPlayingRecording();
+        }, lasts)
+    )
 }
 
-function stopPlayingRecording() {
+function stopPlayingRecording(pr = false) {
+    if (!playing_recording && !pr) return;
+
+    for (const interval of movement_intervals) clearTimeout(interval);
+
     holding.a = false;
     holding.d = false;
 
-    playing_recording = false;
+    playing_recording = pr;
 
     killPlayer();
 }

@@ -87,8 +87,6 @@ gameScene.update = function () {
     // The user can switch tabs, but cannot change applications:
     if (!!focused && !!docFocus && !!winFocus &&
         !!document.hasFocus() && document.visibilityState === 'visible') {
-
-        if (!!focused && !!docFocus && !!winFocus && !!document.hasFocus() && document.visibilityState === 'visible') {
             if (recording && !recording_since) recording_since = performance.now();
 
             Engine.update(this.engine, deltaTime > 64 ? 64 : deltaTime);
@@ -145,11 +143,12 @@ gameScene.update = function () {
                     console.log(JSON.stringify(forces));
                 }
             }
-        }
 
         // `S` key:
         //if (keyIsDown(83))
         //Body.applyForce(this.player, this.player.position, Vector.create(0, 0.01));
+    } else {
+        stopPlayingRecording();
     }
 }
 
