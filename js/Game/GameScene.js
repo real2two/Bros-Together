@@ -136,6 +136,8 @@ gameScene.update = function () {
             //if (keyIsDown(83))
             //Body.applyForce(this.player, this.player.position, Vector.create(0, 0.01));
 
+            if (this.player.position.y > 250) return killPlayer();
+
             if (this.player.position.x > 640 / 2 || this.player.position.x < -640 / 2) {
                 if (playing_recording) {
                     stopPlayingRecording();
