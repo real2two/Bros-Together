@@ -257,8 +257,6 @@ function killPlayer() {
 }
 
 function nextLevel() {
-    // ++level;
-
     stopRecording();
 
     gameScene.player.lastDeathPosition = null;

@@ -26,6 +26,7 @@ function preload() {
     //testImage = loadImage("img/test.png");
 
     SPRITES['controls'] = new Spritesheet('controls.png');
+    SPRITES['how_to_win'] = new Spritesheet('how_to_win.png');
 }
 
 function setup() {
