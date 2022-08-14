@@ -2,6 +2,7 @@ const MAX_LEVELS = 3;
 const CACHED_LEVELS = {};
 
 let level = 1;
+let points = 0;
 
 cacheLevels();
 

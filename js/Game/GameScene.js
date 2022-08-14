@@ -47,7 +47,7 @@ gameScene.setup = async function () {
                     Composite.remove(currentScene.engine.world, other);
                     currentScene.bodies.splice(currentScene.bodies.indexOf(other), 1);
 
-                    //++points;
+                    ++points;
 
                     continue;
                 }
@@ -206,7 +206,8 @@ gameScene.draw = function () {
 
 gameScene.drawUi = function () {
     // This function makes sure the text is on the corner:
-    textOff(fps, 0, 0);
+    //textOff(fps, 0, 0);
+    textOff(`Points: ${points}`, 0, 0);
 
     //this.anim.draw(mouseX, mouseY);
     //image(testsheet.sprites[1], mouseX, mouseY, 400, 400);
