@@ -29,9 +29,6 @@ gameScene.setup = function () {
     Body.setMass(this.player, 25);
     Body.setInertia(this.player, Infinity);
 
-    // load level
-    loadLevel(loadedLevel);
-
     //#region Player Grounding.
     Events.on(this.engine, "collisionStart", function (p_event) {
         for (const { bodyA, bodyB } of p_event.pairs) {
@@ -77,6 +74,8 @@ gameScene.setup = function () {
         //p_cam.center.x = p_cam.pos.x;
     }
 
+    // load level
+    loadLevelByID(1);
 }
 
 gameScene.update = function () {
@@ -264,7 +263,12 @@ function nextLevel() {
     stopRecording();
 
     gameScene.player.lastDeathPosition = null;
-    loadLevel(loadedLevel);
+    
+    if (old_level_data) {
+        loadLevel(loadedLevel);
+    } else {
+        loadLevelByID(++level);
+    }
     
 }
 

@@ -1,0 +1,16 @@
+{
+    "start_pos": {
+        "x": 0,
+        "y": 50
+    },
+    "blocks": [
+        {
+            "is": "static",
+            "x": 0,
+            "y": 72,
+            "width": 768,
+            "height": 20
+        }
+    ],
+    "recording": null
+}

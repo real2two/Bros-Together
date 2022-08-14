@@ -1,12 +1,16 @@
 // FOR PRODUCTION:
 async function loadLevelByID(id) {
     stopDebugLevel();
-    
-    const res = await fetch(`/res/levels/${id}.json`);
-    loadLevel(await res.json());
+
+    try {
+        const res = await fetch(`/res/levels/${id}.json`);
+        loadLevel(await res.json());
+    } catch(err) {
+        alert('Failed to load level.');
+    }
 }
 
-const loadedLevel = { start_pos: { x: 0, y: 0 }, blocks: [{ is: 'static', x: 0, y: 72, width: 768, height: 20 }] };
+const loadedLevel = { start_pos: { x: 0, y: 0 }, blocks: [] };
 let loadedBodies = [];
 
 let shown_sprites = [];
