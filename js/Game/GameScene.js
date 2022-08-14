@@ -222,7 +222,7 @@ gameScene.draw = function () {
 gameScene.drawUi = function () {
     // This function makes sure the text is on the corner:
     //textOff(fps, 0, 0);
-    textOff(`Points: ${points}`, 0, 0);
+    textOff(`Points: ${points}`, 15, 15);
 
     //this.anim.draw(mouseX, mouseY);
     //image(testsheet.sprites[1], mouseX, mouseY, 400, 400);
