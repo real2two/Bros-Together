@@ -86,7 +86,7 @@ gameScene.update = function () {
 
     //#region Tab switch:
     // The user can switch tabs, but cannot change applications:
-    if (!!focused && !!docFocus && !!winFocus && !!document.hasFocus() && document.visibilityState === 'visible' && !visible_fixed) {
+    if (!!focused && !!docFocus && !!winFocus && !!document.hasFocus() && document.visibilityState === 'visible') {
         Engine.update(this.engine, deltaTime > 64 ? 64 : deltaTime);
 
         /*
@@ -116,12 +116,6 @@ gameScene.update = function () {
         // `S` key:
         //if (keyIsDown(83))
         //Body.applyForce(this.player, this.player.position, Vector.create(0, 0.01));
-    } else {
-        if (document.visibilityState === 'visible' && !visible_fixed) {
-            visible_fixed = performance.now() + deltaTime;
-        }
-
-        if (visible_fixed && performance.now() > visible_fixed) visible_fixed = null;
     }
 }
 
