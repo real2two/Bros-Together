@@ -97,9 +97,9 @@ function loadLevel({ start_pos = { x: 0, y: 0 }, sprites = [], blocks, recording
     }
 }
 
-function addBlock({ after_recording, is = 'static', x = 0, y = 0, width = 10, height = 10, killzone = false, properties = {} }) {
+function addBlock({ after_recording, is = 'static', x = 0, y = 0, width = 10, height = 10, killzone = false, hidden = false, properties = {} }) {
     if (playing_recording && after_recording === true) return;
-    if (typeof x !== 'number' || typeof y !== 'number' || typeof width !== 'number' || typeof height !== 'number') return;
+    if (typeof x !== 'number' || typeof y !== 'number' || typeof width !== 'number' || typeof height !== 'number' || typeof hidden !== 'boolean') return;
     
     let block;
     switch (is) {
@@ -118,6 +118,7 @@ function addBlock({ after_recording, is = 'static', x = 0, y = 0, width = 10, he
 
     block.is = is;
     block.killzone = !!killzone;
+    block.hidden = hidden;
 
     loadedBodies.push(block);
 }

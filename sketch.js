@@ -32,6 +32,8 @@ function preload() {
     testsheet = new Spritesheet('test.png');
     //testImage = loadImage("img/test.png");
 
+    SPRITES['bg'] = new Spritesheet('bg.png');
+
     SPRITES['controls'] = new Spritesheet('controls.png');
     SPRITES['how_to_win'] = new Spritesheet('how_to_win.png');
     SPRITES['you_win'] = new Spritesheet('you_win.png');

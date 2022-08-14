@@ -2,6 +2,8 @@
 
 let gameScene = new Scene();
 
+let bg = [ { sprite: 'bg', x: 0, y: 0 }];
+
 gameScene.setup = async function () {
     this.engine = Engine.create();
 
@@ -158,6 +160,8 @@ gameScene.update = function () {
 //#region `gameScene.draw()`:
 gameScene.draw = function () {
     for (let b of this.bodies) {
+        if (b.hidden) continue;
+
         push();
 
         if (loadedBodies.includes(b)) {
@@ -204,7 +208,15 @@ gameScene.draw = function () {
         image(SPRITES[id].sheet, 0, 0, width, height);
         pop();
     }
-};
+    
+    for (const { sprite, x, y } of bg) {
+        push();
+        translate(x - (this.player.positionPrev.x / 2), y);
+        imageMode(CENTER);
+        image(SPRITES[sprite].sheet, 0, 0, width, height);
+        pop();
+    }
+}
 //#endregion
 
 gameScene.drawUi = function () {
