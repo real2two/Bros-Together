@@ -3,6 +3,15 @@
         "x": 0,
         "y": -100
     },
+    "sprites": [
+        {
+            "id": "controls",
+            "x": 0,
+            "y": 0,
+            "width": 240,
+            "height": 135
+        }
+    ],
     "blocks": [
         {
             "is": "static",

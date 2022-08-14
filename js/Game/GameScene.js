@@ -192,6 +192,16 @@ gameScene.draw = function () {
 
         pop();
     }
+
+    for (let { id, x = 0, y = 0, width, height } of shown_sprites) {
+        if (!id) continue;
+
+        push();
+        translate(x, y);
+        imageMode(CENTER);
+        image(SPRITES[id].sheet, 0, 0, width, height);
+        pop();
+    }
 };
 //#endregion
 

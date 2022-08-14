@@ -9,12 +9,16 @@ async function loadLevelByID(id) {
 const loadedLevel = { start_pos: { x: 0, y: 0 }, blocks: [{ is: 'static', x: 0, y: 72, width: 768, height: 20 }] };
 let loadedBodies = [];
 
-function loadLevel({ start_pos = { x: 0, y: 0 }, blocks, recording }) {
+let shown_sprites = [];
+
+function loadLevel({ start_pos = { x: 0, y: 0 }, sprites = [], blocks, recording }) {
     if (!start_pos.x) start_pos.x = 0;
     if (!start_pos.y) start_pos.y = 0;
 
     loadedLevel.start_pos = start_pos;
     loadedLevel.blocks = blocks;
+
+    shown_sprites = sprites;
 
     Composite.remove(currentScene.engine.world, loadedBodies);
 

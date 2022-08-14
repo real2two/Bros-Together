@@ -13,6 +13,8 @@ let SOUNDS = {};
 let testsheet, testImage;
 let { Composite, Events, Vector, Body, Bodies, Engine, Detector } = Matter;
 
+let SPRITES = {};
+
 function preload() {
     soundFormats('mp3');
     loadAudio("rickroll");
@@ -23,7 +25,7 @@ function preload() {
     testsheet = new Spritesheet('test.png');
     //testImage = loadImage("img/test.png");
 
-
+    SPRITES['controls'] = new Spritesheet('controls.png');
 }
 
 function setup() {
