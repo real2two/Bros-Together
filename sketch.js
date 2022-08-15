@@ -3,11 +3,7 @@ if (PRODUCTION === false) {
     document.getElementById('level_data').style.display = 'none';
     document.getElementById('debug').style.display = 'block';
     document.getElementById('play_recording').style.display = 'block';
-<<<<<<< Updated upstream
     document.getElementsByTagName('title')[0].innerText = '[DEBUG] Wowie 4.0 Submission!';
-=======
-    document.getElementsByTagName('title')[0].innerHTML = "[DEBUG] Wowie 4.0 Submission!";
->>>>>>> Stashed changes
 }
 
 // Beware that going to `http://127.0.0.1:5500/` will NOT give you debug mode.

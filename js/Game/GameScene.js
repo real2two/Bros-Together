@@ -151,12 +151,6 @@ gameScene.update = function () {
 
             Body.applyForce(this.player, this.player.position, Vector.create(-0.01, 0));
 
-<<<<<<< Updated upstream
-            forces["frame"] = frameCount;
-            forces["frame"]["x"] = -0.01;
-            forces["frame"]["y"] = 0;
-=======
->>>>>>> Stashed changes
         } else {
             logMovement('a', false);
         }
@@ -165,12 +159,6 @@ gameScene.update = function () {
             logMovement('d', true);
 
             Body.applyForce(this.player, this.player.position, Vector.create(0.01, 0));
-<<<<<<< Updated upstream
-            forces["frame"] = frameCount;
-            forces["frame"]["x"] = 0.01;
-            forces["frame"]["y"] = 0;
-=======
->>>>>>> Stashed changes
         } else {
             logMovement('d', false);
         }
@@ -179,22 +167,14 @@ gameScene.update = function () {
         //if (keyIsDown(83))
         //Body.applyForce(this.player, this.player.position, Vector.create(0, 0.01));
 
-<<<<<<< Updated upstream
-        if (this.player.position.y > 250) return killPlayer();
-=======
         if (this.player.position.y > 250)
             return killPlayer();
->>>>>>> Stashed changes
 
         if (this.player.position.x > 640 / 2 || this.player.position.x < -640 / 2) {
             if (playing_recording) {
                 stopPlayingRecording();
             } else {
                 nextLevel();
-<<<<<<< Updated upstream
-                console.log(JSON.stringify(forces));
-=======
->>>>>>> Stashed changes
             }
         }
 
