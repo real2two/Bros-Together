@@ -110,9 +110,10 @@ gameScene.setup = async function () {
     // "Camera scripts" are functions that get a `Camera` as a parameter.
     // You modify the properties of the camera YOU RECEIVE, so the functionality can be transferred over.
 
+    /*
     this.fadeWave = new SineWave(0.01, 0);
     console.log(this.fadeWave);
-    //this.fadeWave.endWhenAngleAccumulatesTo(120);
+    this.fadeWave.endWhenAngleAccumulatesTo(120);
     this.cam.script = (p_cam) => {
         switch (level) {
             case 1:
@@ -123,6 +124,7 @@ gameScene.setup = async function () {
         //p_cam.center.x = p_cam.pos.x;
     }
     this.fadeWave.set(0);
+    */
 }
 
 gameScene.update = function () {
@@ -200,8 +202,6 @@ gameScene.update = function () {
 }
 
 gameScene.draw = function () {
-    this.cam.pos.z = this.fadeWave.get() * 250;
-
     for (let b of this.bodies) {
         if (b.hidden) continue;
 
