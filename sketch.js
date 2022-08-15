@@ -25,11 +25,15 @@ let { Composite, Events, Vector, Body, Bodies, Engine, Detector } = Matter;
 
 let SPRITES = {};
 
+let coinBloomTexture;
+
 function preload() {
     soundFormats('mp3');
 
     for (let f of FONT_PATHS)
         FONTS[f] = loadFont(f);
+
+    coinBloomTexture = loadImage("img/coin_bloom.png");
 
     testsheet = new Spritesheet('test.png');
 
