@@ -16,13 +16,14 @@ titleScene.setup = function () {
         exitStart: 0,
         exitStarted: false,
     };
-    SOUNDS["Title"].loop();
 }
 
 titleScene.update = function () {
     if (this.playBtn.exitStarted) {
-        if (millis() > this.playBtn.exitStart + 1000 * PI / 2)
+        if (millis() > this.playBtn.exitStart + 1000 * PI / 2) {
+            SOUNDS["Title"].loop();
             setScene(gameScene);
+        }
         this.playBtn.alpha = sin((millis() - this.playBtn.exitStart) * 0.001) * 255;
         this.cam.clearColor = color(255 - this.playBtn.alpha);
         return;

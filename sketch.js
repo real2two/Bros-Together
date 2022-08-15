@@ -104,6 +104,7 @@ function draw() {
     if (deltaTime != 0)
         currentScene.update();
 
+
     push();
     //for (let a of currentScene.ANIMATIONS)
     //a.frameN++;
@@ -117,6 +118,8 @@ function draw() {
     translate(-cx, -cy);
     currentScene.drawUi();
     end2D();
+
+    currentScene.framesSinceStart++;
 
     pfocused = focused;
     pwinFocus = winFocus;

@@ -16,6 +16,7 @@ class Scene {
     constructor() {
         SCENES.push(this);
         this.ANIMATIONS = [];
+        this.framesSinceStart = 0;
     }
 
     setup() { }
