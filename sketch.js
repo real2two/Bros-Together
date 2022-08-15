@@ -1,4 +1,4 @@
-const PRODUCTION = !window.location.href.startsWith('http://localhost');
+const PRODUCTION = true; //!window.location.href.startsWith('http://localhost');
 if (PRODUCTION === false) {
     document.getElementById('level_data').style.display = 'none';
     document.getElementById('debug').style.display = 'block';
@@ -57,6 +57,7 @@ function preload() {
 
     SPRITES['level-6'] = new Spritesheet('level-6.png');
     SPRITES['level-8'] = new Spritesheet('level-8.png');
+    SPRITES['final-level'] = new Spritesheet('final-level.png');
 }
 
 function setup() {
