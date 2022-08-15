@@ -56,9 +56,8 @@ titleScene.draw = function () {
 }
 
 titleScene.mouseClicked = function () {
-    //if (this.playBtn.hovered && !this.playBtn.exitStarted) {
+    if (!this.playBtn.exitStarted) {
         this.playBtn.exitStart = millis();
         this.playBtn.exitStarted = true;
-    //}
-
+    }
 }
