@@ -1,18 +1,73 @@
-// FOR PRODUCTION:
-async function loadLevelByID(id) {
-    const res = await fetch(`/res/levels/${id}.json`);
-    loadLevel(await res.json());
+const MAX_LEVELS = 13;
+const CACHED_LEVELS = {};
+
+let level = 1;
+let points = 0;
+
+cacheLevels();
+
+async function cacheLevels() {
+    for (let i = 0; i < MAX_LEVELS; ++i) {
+        if (CACHED_LEVELS[i + 1]) continue;
+
+        try {
+            const res = await fetch(`res/levels/${i + 1}.json`);
+            CACHED_LEVELS[i + 1] = await res.json();
+        } catch(err) {
+            alert('An error has occured while trying to load a level. Expect errors. (Try reloading!)');
+            console.error(err);
+        }
+    }
 }
 
-const loadedLevel = { start_pos: { x: 0, y: 0 }, blocks: [{ is: 'static', x: 0, y: 72, width: 768, height: 20 }] };
+// FOR PRODUCTION:
+async function loadLevelByID(id) {
+    stopDebugLevel();
+
+    if (!CACHED_LEVELS[id]) id = MAX_LEVELS; //return alert(`Cannot find level with the provided ID. (${id})`)
+
+    CACHED_LEVELS[MAX_LEVELS].sprites[1] = {
+        id: points >= 10 ? "map_editor" : "how_to_unlock",
+        x: 0,
+        y: 0,
+        width: 240,
+        height: 135
+    } 
+
+    if (id === MAX_LEVELS && points >= 10) document.getElementById('debug').style.display = 'block';
+    loadLevel(CACHED_LEVELS[id]);
+
+    if (document.getElementById('debug').style.display !== 'none') {
+        const level = { ...CACHED_LEVELS[id] };
+        delete level.recording;
+        
+        document.getElementById('level_data').value = JSON.stringify(level, 0, 2);
+    }
+
+    /*
+    try {
+        const res = await fetch(`res/levels/${id}.json`);
+        return loadLevel(await res.json());
+    } catch(err) {
+        alert('Failed to load level.');
+    }
+    */
+}
+
+const loadedLevel = { start_pos: { x: 0, y: 0 }, blocks: [] };
 let loadedBodies = [];
 
-function loadLevel({ start_pos = { x: 0, y: 0 }, blocks }) {
-    if (!start_pos.x) start_pos.x = 0;
-    if (!start_pos.y) start_pos.y = 0;
+let shown_sprites = [];
+
+function loadLevel({ start_pos = { x: 0, y: 0 }, sprites = [], blocks, recording }) {
+    if (typeof start_pos.x !== 'number') start_pos.x = 0;
+    if (typeof start_pos.y !== 'number') start_pos.y = 0;
 
     loadedLevel.start_pos = start_pos;
     loadedLevel.blocks = blocks;
+    loadedLevel.sprites = sprites;
+
+    shown_sprites = sprites;
 
     Composite.remove(currentScene.engine.world, loadedBodies);
 
@@ -35,24 +90,35 @@ function loadLevel({ start_pos = { x: 0, y: 0 }, blocks }) {
 
     gameScene.player.grounded = false;
     gameScene.player.firstJump = false;
+
+    if (recording) {
+        if (typeof recording.lasts !== 'number' || !Array.isArray(recording.actions)) return;
+        return playRecording(recording);
+    }
 }
 
-function addBlock({ is = 'static', x = 0, y = 0, width = 10, height = 10, killzone = false, properties = {} }) {
+function addBlock({ after_recording, is = 'static', x = 0, y = 0, width = 10, height = 10, killzone = false, hidden = false, properties = {} }) {
+    if (playing_recording && after_recording === true) return;
+    if (typeof x !== 'number' || typeof y !== 'number' || typeof width !== 'number' || typeof height !== 'number' || typeof hidden !== 'boolean') return;
+    
     let block;
     switch (is) {
-        case 'static':
-            block = createBlock(x, y, width, height, { isStatic: true, ...properties });
-            break;
         case 'movable':
             block = createBlock(x, y, width, height, properties);
             break;
         case 'collectable':
             block = createBlock(x, y, width, height, { restitution: 0, mass: 0, inverseMass: 0, ...properties });
             break;
+        case 'static':
+        default:
+            is = 'static';
+            block = createBlock(x, y, width, height, { isStatic: true, ...properties });
+            break;
     }
 
     block.is = is;
-    block.killzone = killzone;
+    block.killzone = !!killzone;
+    block.hidden = hidden;
 
     loadedBodies.push(block);
 }

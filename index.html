@@ -16,7 +16,11 @@
 </head>
 
 <body>
-    <input id="level_id" placeholder="level id">
+    <div id="debug" style="display: none;">
+        <input id="level_id" placeholder="level id">
+        <button id="play_recording" onclick="playRecordedRecording()" style="display: none">Play recording.</button>
+        <textarea id="level_data"></textarea>
+    </div>
 
     <script src="js/Engine/PhysicsUtils.js"></script>
     <script src="js/Engine/Loose.js"></script>
@@ -24,6 +28,7 @@
     <script src="js/Engine/Scene.js"></script>
     <script src="js/Engine/Spritesheet.js"></script>
     <script src="js/Engine/Animation.js"></script>
+    <script src="js/Engine/Particles.js"></script>
 
     <!-- Have to be the last files in this order!:  -->
     <script src="js/Game/Block.js"></script>
@@ -33,6 +38,8 @@
 
     <script src="js/Game/LoadLevel.js"></script>
     <script src="js/Game/LevelDebugging.js"></script>
+    <script src="js/Game/Recorder.js"></script>
+    <script src="js/Game/MapEditor.js"></script>
 
     <script src="sketch.js"></script>
 

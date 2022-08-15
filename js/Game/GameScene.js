@@ -2,7 +2,9 @@
 
 let gameScene = new Scene();
 
-gameScene.setup = function () {
+let bg = [ { sprite: 'bg', x: 0, y: 0 }];
+
+gameScene.setup = async function () {
     this.engine = Engine.create();
 
     //this.engine.gravity.scale = pow(10, -4); // Water.
@@ -30,7 +32,8 @@ gameScene.setup = function () {
     Body.setInertia(this.player, Infinity);
 
     // load level
-    loadLevel(loadedLevel);
+    await cacheLevels();
+    loadLevelByID(1);
 
     //#region Player Grounding.
     Events.on(this.engine, "collisionStart", function (p_event) {
@@ -46,7 +49,7 @@ gameScene.setup = function () {
                     Composite.remove(currentScene.engine.world, other);
                     currentScene.bodies.splice(currentScene.bodies.indexOf(other), 1);
 
-                    //++points;
+                    ++points;
 
                     continue;
                 }
@@ -76,7 +79,6 @@ gameScene.setup = function () {
         //p_cam.pos.x = sin(millis() * 0.001) * 250;
         //p_cam.center.x = p_cam.pos.x;
     }
-
 }
 
 gameScene.update = function () {
@@ -88,8 +90,8 @@ gameScene.update = function () {
     // The user can switch tabs, but cannot change applications:
     if (!!focused && !!docFocus && !!winFocus &&
         !!document.hasFocus() && document.visibilityState === 'visible') {
+            if (recording && !recording_since) recording_since = performance.now();
 
-        if (!!focused && !!docFocus && !!winFocus && !!document.hasFocus() && document.visibilityState === 'visible') {
             Engine.update(this.engine, deltaTime > 64 ? 64 : deltaTime);
 
             /*
@@ -104,59 +106,76 @@ gameScene.update = function () {
                     y: this.player.position.y > cy ? cy : this.player.position.y
                 });
                 */
-            if (this.player.position.x > 640 / 2 || this.player.position.x < -640 / 2) {
-                nextLevel();
-                console.log(JSON.stringify(forces));
-            }
+
             //#endregion
 
             // `W` / jumping is handled in the `testScene.keyPressed()` function.
             // Here we handle the sides:
-            if (keyIsDown(65)) {
+            if (!loading_level && !playing_recording && keyIsDown(65) || playing_recording && holding['a']) { // a
+                logMovement('a', true);
+
                 Body.applyForce(this.player, this.player.position, Vector.create(-0.01, 0));
 
-                forces["frame" + (frameCount - forcesStart)];
-                forces["frame" + (frameCount - forcesStart) + "x"] = -0.01;
-                forces["frame" + (frameCount - forcesStart) + "y"] = 0;
-            }
-            if (keyIsDown(68)) {
-                Body.applyForce(this.player, this.player.position, Vector.create(0.01, 0));
-                forces["frame" + (frameCount - forcesStart)];
-                forces["frame" + (frameCount - forcesStart) + "x"] = 0.01;
-                forces["frame" + (frameCount - forcesStart) + "y"] = 0;
+                forces["frame"] = frameCount;
+                forces["frame"]["x"] = -0.01;
+                forces["frame"]["y"] = 0;
+            } else {
+                logMovement('a', false);
             }
 
-            if (keyIsDown(68))
+            if (!loading_level && !playing_recording && keyIsDown(68) || playing_recording && holding['d']) { // d
+                logMovement('d', true);
+
                 Body.applyForce(this.player, this.player.position, Vector.create(0.01, 0));
+                forces["frame"] = frameCount;
+                forces["frame"]["x"] = 0.01;
+                forces["frame"]["y"] = 0;
+            } else {
+                logMovement('d', false);
+            }
 
             // `S` key:
             //if (keyIsDown(83))
             //Body.applyForce(this.player, this.player.position, Vector.create(0, 0.01));
 
-        }
+            if (this.player.position.y > 250) return killPlayer();
+
+            if (this.player.position.x > 640 / 2 || this.player.position.x < -640 / 2) {
+                if (playing_recording) {
+                    stopPlayingRecording();
+                } else {
+                    nextLevel();
+                    console.log(JSON.stringify(forces));
+                }
+            }
 
         // `S` key:
         //if (keyIsDown(83))
         //Body.applyForce(this.player, this.player.position, Vector.create(0, 0.01));
+    } else {
+        stopPlayingRecording();
     }
 }
 
 //#region `gameScene.draw()`:
 gameScene.draw = function () {
     for (let b of this.bodies) {
+        if (b.hidden) continue;
+
         push();
 
         if (loadedBodies.includes(b)) {
             switch (b.is) {
-                case 'static':
-                    noFill();
-                    stroke(255);
-                    break;
                 case 'movable':
                     fill(150);
                     break;
                 case 'collectable':
                     fill('#F4DF4E')
+                    break;
+                case 'static':
+                default:
+                    noFill();
+                    stroke(255);
                     break;
             }
 
@@ -170,14 +189,40 @@ gameScene.draw = function () {
             vertex(v.x, v.y);
         endShape(CLOSE);
 
+        if (this.player === b && playing_recording) {
+            textAlign(CENTER);
+            fill(0);
+            textSize(15);
+            text('AI', b.vertices[0].x + 10, b.vertices[0].y + 15);
+        }
+
         pop();
     }
-};
+
+    for (let { id, x = 0, y = 0, width, height } of shown_sprites) {
+        if (!id || !SPRITES[id] || typeof x !== 'number' || typeof y !== 'number' || typeof width !== 'number' || typeof height !== 'number') continue;
+
+        push();
+        translate(x, y);
+        imageMode(CENTER);
+        image(SPRITES[id].sheet, 0, 0, width, height);
+        pop();
+    }
+    
+    for (const { sprite, x, y } of bg) {
+        push();
+        translate(x - (this.player.positionPrev.x / 2), y);
+        imageMode(CENTER);
+        image(SPRITES[sprite].sheet, 0, 0, width, height);
+        pop();
+    }
+}
 //#endregion
 
 gameScene.drawUi = function () {
     // This function makes sure the text is on the corner:
-    textOff(fps, 0, 0);
+    //textOff(fps, 0, 0);
+    textOff(`Points: ${points}`, 15, 15);
 
     //this.anim.draw(mouseX, mouseY);
     //image(testsheet.sprites[1], mouseX, mouseY, 400, 400);
@@ -204,43 +249,21 @@ gameScene.mousePressed = function () {
     //SOUNDS["Rickroll"].play();
 }
 
-let forces = {}, forcesStart;
+let forces = {};
 
 gameScene.keyPressed = function name() {
+    if (loading_level || playing_recording) return;
+    
     switch (keyCode) {
         case 87:
-            if (this.player.grounded) {
-                Body.applyForce(this.player, this.player.position, Vector.create(0, -0.3));
-                forces["frame" + (frameCount - forcesStart)];
-                forces["frame" + (frameCount - forcesStart) + "x"] = 0;
-                forces["frame" + (frameCount - forcesStart) + "y"] = -0.3;
-                this.player.firstJump = false;
-            } else if (this.player.firstJump) {
-                // Double jump:
-                Body.applyForce(this.player, this.player.position, Vector.create(0, -0.28));
-                forces["frame" + (frameCount - forcesStart)];
-                forces["frame" + (frameCount - forcesStart) + "x"] = 0;
-                forces["frame" + (frameCount - forcesStart) + "y"] = -0.28;
-                this.player.firstJump = false;
-            }
+            logMovement('w');
+            jump();
             break;
 
         case 82: // `R`
             console.log("Resetting...");
 
-            for (let prop in forces)
-                delete prop;
-
-            forces = {};
-            forcesStart = frameCount;
-
             killPlayer();
-            break;
-
-        case 70:
-            moveToScript(currentScene.player, {
-                "frame37x": 0.01, "frame37y": 0, "frame38x": 0.01, "frame38y": 0, "frame39x": 0.01, "frame39y": 0, "frame40x": 0.01, "frame40y": 0, "frame41x": 0.01, "frame41y": 0, "frame42x": 0.01, "frame42y": 0, "frame43x": 0.01, "frame43y": 0, "frame44x": 0.01, "frame44y": 0, "frame45x": 0.01, "frame45y": 0, "frame46x": 0.01, "frame46y": 0, "frame47x": 0.01, "frame47y": 0, "frame48x": 0.01, "frame48y": 0, "frame49x": 0.01, "frame49y": 0, "frame50x": 0.01, "frame50y": 0, "frame51x": 0.01, "frame51y": 0, "frame52x": 0.01, "frame52y": 0, "frame53x": 0.01, "frame53y": 0, "frame54x": 0.01, "frame54y": 0, "frame55x": 0.01, "frame55y": 0, "frame56x": 0.01, "frame56y": 0, "frame57x": 0.01, "frame57y": 0, "frame58x": 0.01, "frame58y": 0, "frame59x": 0.01, "frame59y": 0, "frame60x": 0.01, "frame60y": 0, "frame61x": 0, "frame61y": -0.3, "frame62x": 0.01, "frame62y": 0, "frame63x": 0.01, "frame63y": 0, "frame64x": 0.01, "frame64y": 0, "frame65x": 0.01, "frame65y": 0, "frame66x": 0.01, "frame66y": 0, "frame67x": 0.01, "frame67y": 0, "frame68x": 0.01, "frame68y": 0, "frame69x": 0.01, "frame69y": 0, "frame70x": 0.01, "frame70y": 0, "frame71x": 0.01, "frame71y": 0, "frame72x": 0.01, "frame72y": 0, "frame73x": 0.01, "frame73y": 0, "frame74x": 0.01, "frame74y": 0, "frame75x": 0.01, "frame75y": 0, "frame76x": 0.01, "frame76y": 0, "frame77x": 0.01, "frame77y": 0, "frame78x": 0.01, "frame78y": 0, "frame79x": 0, "frame79y": -0.28, "frame80x": 0.01, "frame80y": 0, "frame81x": 0.01, "frame81y": 0, "frame82x": 0.01, "frame82y": 0, "frame83x": 0.01, "frame83y": 0, "frame84x": 0.01, "frame84y": 0, "frame85x": 0.01, "frame85y": 0, "frame86x": 0.01, "frame86y": 0, "frame87x": 0.01, "frame87y": 0, "frame88x": 0.01, "frame88y": 0, "frame89x": 0.01, "frame89y": 0, "frame90x": 0.01, "frame90y": 0, "frame91x": 0.01, "frame91y": 0, "frame92x": 0.01, "frame92y": 0, "frame93x": 0.01, "frame93y": 0, "frame94x": 0.01, "frame94y": 0, "frame95x": 0.01, "frame95y": 0, "frame96x": 0.01, "frame96y": 0, "frame97x": 0.01, "frame97y": 0, "frame98x": 0.01, "frame98y": 0, "frame99x": 0.01, "frame99y": 0
-            });
             break;
     }
 }
@@ -250,44 +273,40 @@ function killPlayer() {
     loadLevel(loadedLevel);
 }
 
-function nextLevel() {
-    // ++level;
+let loading_level = false;
+
+async function nextLevel() {
+    stopRecording();
 
     gameScene.player.lastDeathPosition = null;
-    loadLevel(loadedLevel);
-}
+    
+    if (old_level_data || level === MAX_LEVELS) {
+        loadLevel(loadedLevel);
+    } else {
+        if (loading_level) return;
 
+        loading_level = true;
 
-async function moveToScript(p_body, p_script) {
-    let prevProp = null;
-    for (let prop in p_script) {
-        setTimeout(
-            Body.applyForce(p_body, p_body.position, {
-                x: p_script[prop] || 0,
-                y: p_script[prop] || 0
-            }), 640
-            /*
-            * (float(parseInt(() => {
-                let str = "";
-                for (let i = 5; i < prop.length - 2; i++)
-                    str.concat(prop[i]);
-                return str;
-            }))
-                -
-                float(parseInt(() => {
-                    let str = "";
-                    for (let i = 5; i < prevProp.length - 2; i++)
-                        str.concat(prevProp[i]);
-                    return str;
-                })))
-                */
-        );
+        ++level;
+        await loadLevelByID(level);
 
-        prevProp = prop;
+        loading_level = false;
     }
 }
 
-function givePropertyValues(p_obj) {
-    for (let prop in p_obj)
-        console.log(p_obj[prop]);
+function jump() {
+    if (gameScene.player.grounded) {
+        Body.applyForce(gameScene.player, gameScene.player.position, Vector.create(0, -0.3));
+        forces["frame"] = frameCount;
+        forces["frame"]["x"] = 0;
+        forces["frame"]["y"] = -0.3;
+        gameScene.player.firstJump = false;
+    } else if (gameScene.player.firstJump) {
+        // Double jump:
+        Body.applyForce(gameScene.player, gameScene.player.position, Vector.create(0, -0.28));
+        forces["frame"] = frameCount;
+        forces["frame"]["x"] = 0;
+        forces["frame"]["y"] = -0.28;
+        gameScene.player.firstJump = false;
+    }
 }

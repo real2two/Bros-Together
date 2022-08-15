@@ -1,0 +1,26 @@
+{
+    "start_pos": {
+        "x": 0,
+        "y": 50
+    },
+    "sprites": [
+        {
+            "id": "controls",
+            "x": 0,
+            "y": 0,
+            "width": 240,
+            "height": 135
+        }
+    ],
+    "blocks": [
+        {
+            "is": "static",
+            "x": 0,
+            "y": 72,
+            "width": 768,
+            "height": 20,
+            "hidden": true
+        }
+    ],
+    "recording": null
+}

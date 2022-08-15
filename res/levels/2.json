@@ -1,0 +1,26 @@
+{
+    "start_pos": {
+        "x": 0,
+        "y": 50
+    },
+    "sprites": [
+        {
+            "id": "how_to_win",
+            "x": 0,
+            "y": -10,
+            "width": 240,
+            "height": 135
+        }
+    ],
+    "blocks": [
+        {
+            "is": "static",
+            "x": 0,
+            "y": 72,
+            "width": 768,
+            "height": 20,
+            "hidden": true
+        }
+    ],
+    "recording": null
+}

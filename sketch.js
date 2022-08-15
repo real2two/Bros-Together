@@ -1,3 +1,10 @@
+const PRODUCTION = !window.location.href.startsWith('http://localhost');
+if (PRODUCTION === false) {
+    document.getElementById('level_data').style.display = 'none';
+    document.getElementById('debug').style.display = 'block';
+    document.getElementById('play_recording').style.display = 'block';
+}
+
 let cx = 0.0, cy = 0.0;
 let currentScene;
 let gl;
@@ -7,15 +14,17 @@ let pfocused, winFocus = true, pwinFocus = true, docFocus = true, pdocFocus;
 let visible_fixed;
 
 // Assets:
-let FONT_PATHS = ["../res/Sono-Regular.ttf"];
+let FONT_PATHS = ["res/Sono-Regular.ttf"];
 let FONTS = {};
 let SOUNDS = {};
 let testsheet, testImage;
 let { Composite, Events, Vector, Body, Bodies, Engine, Detector } = Matter;
 
+let SPRITES = {};
+
 function preload() {
     soundFormats('mp3');
-    loadAudio("rickroll");
+    loadAudio("Rickroll");
 
     for (let f of FONT_PATHS)
         FONTS[f] = loadFont(f);
@@ -23,7 +32,14 @@ function preload() {
     testsheet = new Spritesheet('test.png');
     //testImage = loadImage("img/test.png");
 
+    SPRITES['bg'] = new Spritesheet('bg.png');
 
+    SPRITES['controls'] = new Spritesheet('controls.png');
+    SPRITES['how_to_win'] = new Spritesheet('how_to_win.png');
+    SPRITES['you_win'] = new Spritesheet('you_win.png');
+
+    SPRITES['map_editor'] = new Spritesheet('map_editor.png');
+    SPRITES['how_to_unlock'] = new Spritesheet('how_to_unlock.png');
 }
 
 function setup() {

@@ -7,7 +7,11 @@ canvas {
   display: block;
 }
 
-input {
+input, button, textarea {
   position: absolute;
   right: 0;
+}
+
+textarea, button {
+  bottom: 0;
 }
