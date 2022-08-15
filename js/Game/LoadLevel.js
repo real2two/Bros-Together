@@ -30,14 +30,14 @@ async function loadLevelByID(id) {
     if (!CACHED_LEVELS[id]) id = MAX_LEVELS; //return alert(`Cannot find level with the provided ID. (${id})`)
 
     CACHED_LEVELS[MAX_LEVELS].sprites[1] = {
-        id: points >= 10 ? "map_editor" : "how_to_unlock",
+        id: points >= 7 ? "map_editor" : "how_to_unlock",
         x: 0,
         y: 0,
         width: 240,
         height: 135
     }
 
-    if (id === MAX_LEVELS && points >= 10)
+    if (id === MAX_LEVELS && points >= 7)
         document.getElementById('debug').style.display = 'block';
     loadLevel(CACHED_LEVELS[id]);
 
