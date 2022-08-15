@@ -56,6 +56,7 @@ function preload() {
     SPRITES['how_to_unlock'] = new Spritesheet('how_to_unlock.png');
 
     SPRITES['level-6'] = new Spritesheet('level-6.png');
+    SPRITES['level-9'] = new Spritesheet('level-9.png');
 }
 
 function setup() {
