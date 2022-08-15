@@ -25,6 +25,7 @@ titleScene.update = function () {
             setScene(gameScene);
         this.playBtn.alpha = sin((millis() - this.playBtn.exitStart) * 0.001) * 255;
         this.cam.clearColor = color(255 - this.playBtn.alpha);
+        return;
     } else {
         this.playBtn.y = Math.sin(millis() * 0.0018) * 12.5;
         if (
@@ -53,7 +54,7 @@ titleScene.draw = function () {
 }
 
 titleScene.mouseClicked = function () {
-    if (this.playBtn.hovered) {
+    if (this.playBtn.hovered && !this.playBtn.exitStarted) {
         this.playBtn.exitStart = millis();
         this.playBtn.exitStarted = true;
     }

@@ -141,6 +141,10 @@ gameScene.update = function () {
         !!document.hasFocus() && document.visibilityState === 'visible') {
         if (recording && !recording_since) recording_since = performance.now();
 
+
+        if (playing_recording)
+            Body.setPosition(this.player, loadedLevel.start_pos);
+
         Engine.update(this.engine, deltaTime > 64 ? 64 : deltaTime);
 
         //#region Player Loop:
@@ -162,13 +166,15 @@ gameScene.update = function () {
         // `W` / jumping is handled in the `testScene.keyPressed()` function.
         // Here we handle the sides:
         //#region
-        if (!loading_level && !playing_recording && keyIsDown(65)) { // a
-            Body.applyForce(this.player, this.player.position, Vector.create(-0.01, 0));
-        }
+        if (keyIsDown(65))
+            if (!loading_level && !playing_recording) { // a
+                Body.applyForce(this.player, this.player.position, Vector.create(-0.01, 0));
+            }
 
-        if (!loading_level && !playing_recording && keyIsDown(68)) { // d
-            Body.applyForce(this.player, this.player.position, Vector.create(0.01, 0));
-        }
+        if (keyIsDown(68))
+            if (!loading_level && !playing_recording) { // d
+                Body.applyForce(this.player, this.player.position, Vector.create(0.01, 0));
+            }
 
         //#endregion
 
