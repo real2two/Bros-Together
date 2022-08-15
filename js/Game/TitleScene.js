@@ -43,10 +43,12 @@ titleScene.update = function () {
 titleScene.draw = function () {
     stroke(0);
 
-    fill(this.playBtn.exitStarted ? 255 - this.playBtn.alpha : 245);
+    imageMode(CENTER);
+    image(SPRITES['bg'].sheet, 0, 0);
+
+    fill(0, this.playBtn.exitStarted ? this.playBtn.alpha : 0);
 
     translate(this.playBtn.x, this.playBtn.y);
-    rect(0, 0, this.playBtn.w, this.playBtn.h);
 
     fill(0);
     textSize(16);
@@ -54,9 +56,9 @@ titleScene.draw = function () {
 }
 
 titleScene.mouseClicked = function () {
-    if (this.playBtn.hovered && !this.playBtn.exitStarted) {
+    //if (this.playBtn.hovered && !this.playBtn.exitStarted) {
         this.playBtn.exitStart = millis();
         this.playBtn.exitStarted = true;
-    }
+    //}
 
 }
