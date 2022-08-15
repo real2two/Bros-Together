@@ -70,6 +70,20 @@
             "y": 10,
             "width": 45,
             "height": 10
+        },
+        {
+            "is": "static",
+            "x": -237.5,
+            "y": -170,
+            "width": 75,
+            "height": 154
+        },
+        {
+            "is": "static",
+            "x": 270,
+            "y": -123,
+            "width": 80,
+            "height": 250
         }
     ],
     "recording": null
