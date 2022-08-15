@@ -19,7 +19,7 @@ function startRecording() {
 
 function logMovement(press, hold) {
     if (!recording) return;
-    
+
     const log = { when: performance.now(), press };
 
     if (typeof hold === 'boolean') {
@@ -42,7 +42,7 @@ function stopRecording(log = true) {
             for (const movement of movements) {
                 movement.when -= recording_since;
             }
-    
+
             console.log(JSON.stringify(movements));
         } else {
             console.warn("There's nothing to log. You never started moving.");
@@ -64,7 +64,7 @@ function playRecording({ actions, lasts }) {
 
         movement_intervals.push(
             setTimeout(() => {
-                switch(press) {
+                switch (press) {
                     case 'w':
                         jump();
                         break;
