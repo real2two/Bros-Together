@@ -3,96 +3,53 @@ let playing_recording = false;
 let recording = false;
 let recording_since = null;
 
+let started_playing;
+let playing_actions;
+let bot_pos = { x: 0, y: 0 };
 let movements = [];
-let movement_intervals = [];
-let holding = {
-    a: false,
-    d: false
-}
+
+// record
 
 function startRecording() {
     stopRecording(false);
 
     killPlayer();
     recording = true;
-}
 
-function logMovement(press, hold) {
-    if (!recording) return;
-
-    const log = { when: performance.now(), press };
-
-    if (typeof hold === 'boolean') {
-        log.hold = hold; // true = start holding | false = stop holding
-
-        if (holding[press] === true && log.hold === true) return;
-        if (holding[press] === false && log.hold === false) return;
-
-        holding[press] = hold;
-    }
-
-    movements.push(log);
+    setInterval(() => {
+        movements.push({ ...gameScene.player.position });
+    }, 16);
 }
 
 function stopRecording(log = true) {
     if (!recording) return;
 
     if (log === true) {
-        if (recording_since) {
-            for (const movement of movements) {
-                movement.when -= recording_since;
-            }
-
-            console.log(JSON.stringify(movements));
-        } else {
-            console.warn("There's nothing to log. You never started moving.");
-        }
+        console.log(JSON.stringify(movements));
     }
 
     recording = false;
     recording_since = null;
+
     movements = [];
-    holding.a = false;
-    holding.d = false;
+    bot_pos = { x: 0, y: 0 };
 }
 
-function playRecording({ actions, lasts }) {
+// play
+
+async function playRecording(actions) {
     stopPlayingRecording(true);
 
-    for (const { when, press, hold } of actions) {
-        if (typeof when !== 'number') when = 0;
-
-        movement_intervals.push(
-            setTimeout(() => {
-                switch (press) {
-                    case 'w':
-                        jump();
-                        break;
-                    case 'a':
-                    case 'd':
-                        holding[press] = hold;
-                        break;
-                }
-            }, when)
-        );
-    }
-
-    movement_intervals.push(
-        setTimeout(() => {
-            stopPlayingRecording();
-        }, lasts)
-    )
+    playing_actions = actions;
+    started_playing = performance.now();
 }
 
 function stopPlayingRecording(pr = false) {
     if (!playing_recording && !pr) return;
 
-    for (const interval of movement_intervals) clearTimeout(interval);
-
-    holding.a = false;
-    holding.d = false;
-
     playing_recording = pr;
+    started_playing = null;
+    playing_actions = null;
 
     killPlayer();
 }

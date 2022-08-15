@@ -159,21 +159,12 @@ gameScene.update = function () {
         // `W` / jumping is handled in the `testScene.keyPressed()` function.
         // Here we handle the sides:
         //#region
-        if (!loading_level && !playing_recording && keyIsDown(65) || playing_recording && holding['a']) { // a
-            logMovement('a', true);
-
+        if (!loading_level && !playing_recording && keyIsDown(65)) { // a
             Body.applyForce(this.player, this.player.position, Vector.create(-0.01, 0));
-
-        } else {
-            logMovement('a', false);
         }
 
-        if (!loading_level && !playing_recording && keyIsDown(68) || playing_recording && holding['d']) { // d
-            logMovement('d', true);
-
+        if (!loading_level && !playing_recording && keyIsDown(68)) { // d
             Body.applyForce(this.player, this.player.position, Vector.create(0.01, 0));
-        } else {
-            logMovement('d', false);
         }
 
         //#endregion
@@ -196,12 +187,19 @@ gameScene.update = function () {
         // `S` key:
         //if (keyIsDown(83))
         //Body.applyForce(this.player, this.player.position, Vector.create(0, 0.01));
-    } else {
-        stopPlayingRecording();
     }
 }
 
 gameScene.draw = function () {
+    if (playing_recording && playing_actions) {
+        const frame = Math.floor((performance.now() - started_playing) / 16);
+        if (playing_actions[frame]) {
+            bot_pos = playing_actions[frame];
+        } else {
+            stopPlayingRecording();
+        }
+    }
+    
     for (let b of this.bodies) {
         if (b.hidden) continue;
 
@@ -226,21 +224,38 @@ gameScene.draw = function () {
                 stroke('#EE4B2B');
         }
 
-        if (this.player === b && playing_recording)
-            fill(68, 135, 246);
+        if (this.player === b && playing_recording) {
+            pop();
+            continue;
+        }
+
+        //if (this.player === b && playing_recording)
+        //    fill(68, 135, 246);
 
         beginShape(TESS);
         for (let v of b.vertices)
             vertex(v.x, v.y);
         endShape(CLOSE);
 
-        if (this.player === b && playing_recording) {
-            textAlign(CENTER);
-            fill(0);
-            textSize(15);
-            text('AI', b.vertices[0].x + 10, b.vertices[0].y + 15);
-        }
+        //if (this.player === b && playing_recording) {
+        //    textAlign(CENTER);
+        //    fill(0);
+        //    textSize(15);
+        //    text('AI', b.vertices[0].x + 10, b.vertices[0].y + 15);
+        //}
 
+        pop();
+    }
+
+    if (playing_recording) {
+        push();
+        translate(bot_pos.x, bot_pos.y);
+        fill(68, 135, 246);
+        square(0, 0, 20);
+        textAlign(CENTER);
+        fill(0);
+        textSize(15);
+        text('AI', 0, 5);
         pop();
     }
 
@@ -295,7 +310,6 @@ gameScene.keyPressed = function name() {
 
     switch (keyCode) {
         case 87:
-            logMovement('w');
             jump();
             break;
 
