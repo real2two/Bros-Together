@@ -1,4 +1,4 @@
-const MAX_LEVELS = 13;
+const MAX_LEVELS = 10;
 const CACHED_LEVELS = {};
 
 let level = 1;

@@ -3,13 +3,42 @@
         "x": 0,
         "y": 50
     },
+    "sprites": [
+        {
+            "id": "you_win",
+            "x": 0,
+            "y": 0,
+            "width": 240,
+            "height": 135
+        }
+    ],
     "blocks": [
         {
             "is": "static",
             "x": 0,
-            "y": 72,
+            "y": 100,
             "width": 768,
             "height": 20
+        },
+        {
+            "is": "static",
+            "x": 0,
+            "y": -100,
+            "width": 768,
+            "height": 20
+        },
+        {
+            "is": "static",
+            "x": -300,
+            "y": 0,
+            "width": 20,
+            "height": 250
+        },{
+            "is": "static",
+            "x": 300,
+            "y": 0,
+            "width": 20,
+            "height": 250
         }
     ],
     "recording": null
