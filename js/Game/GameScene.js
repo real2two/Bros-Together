@@ -55,6 +55,7 @@ gameScene.setup = async function () {
                     // It said `gameScene.game.indexOf()` :joy::
                     gameScene.bodies.splice(gameScene.bodies.indexOf(other), 1);
                     ++points;
+                    got_point = true;
                     continue;
                 }
 
@@ -322,6 +323,7 @@ gameScene.keyPressed = function name() {
 }
 
 function killPlayer() {
+    if (got_point) --points;
     gameScene.player.lastDeathTime = performance.now();
     gameScene.player.lastDeathPosition = { ...gameScene.player.position };
     loadLevel(loadedLevel);

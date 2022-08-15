@@ -4,6 +4,8 @@ const CACHED_LEVELS = {};
 let level = 1;
 let points = 0;
 
+let got_point = false;
+
 cacheLevels();
 
 async function cacheLevels() {
@@ -62,6 +64,8 @@ let loadedBodies = [];
 let shown_sprites = [];
 
 function loadLevel({ start_pos = { x: 0, y: 0 }, sprites = [], blocks, recording }) {
+    got_point = false;
+    
     if (typeof start_pos.x !== 'number') start_pos.x = 0;
     if (typeof start_pos.y !== 'number') start_pos.y = 0;
 

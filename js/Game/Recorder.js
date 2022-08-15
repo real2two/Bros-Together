@@ -22,11 +22,13 @@ function startRecording() {
 }
 
 function stopRecording(log = true) {
-    if (!recording) return;
+    if (!recording && log === true) return;
 
     if (log === true) {
         console.log(JSON.stringify(movements));
     }
+
+    console.log(1)
 
     recording = false;
     recording_since = null;
