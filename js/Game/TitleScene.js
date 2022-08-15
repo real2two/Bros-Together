@@ -27,16 +27,12 @@ titleScene.update = function () {
         this.cam.clearColor = color(255 - this.playBtn.alpha);
     } else {
         this.playBtn.y = Math.sin(millis() * 0.0018) * 12.5;
-        if (mouseX > cx + this.playBtn.x - this.playBtn.w * 1.25 &&
+        if (
+            mouseX > cx + this.playBtn.x - this.playBtn.w * 1.25 &&
             mouseX < cx + this.playBtn.x + this.playBtn.w * 1.25 &&
             mouseY > cy + this.playBtn.y - this.playBtn.h * 1.25 &&
             mouseY < cy + this.playBtn.y + this.playBtn.h * 1.25) {
             this.playBtn.hovered = true;
-
-            if (!this.playBtn.phovered && this.playBtn.hovered) {
-                this.playBtn.exitStart = millis();
-                this.playBtn.exitStarted = true;
-            }
         }
 
         this.playBtn.phovered = this.playBtn.hovered;
@@ -45,13 +41,21 @@ titleScene.update = function () {
 
 titleScene.draw = function () {
     stroke(0);
+
     fill(this.playBtn.exitStarted ? 255 - this.playBtn.alpha : 245);
+
     translate(this.playBtn.x, this.playBtn.y);
     rect(0, 0, this.playBtn.w, this.playBtn.h);
 
-    // image(testsheet.sprites[1], 0, 0);
-
     fill(0);
     textSize(16);
-    text("Touch To Begin.", 0, 0);
+    text("Click To Begin.", 0, 0);
+}
+
+titleScene.mouseClicked = function () {
+    if (this.playBtn.hovered) {
+        this.playBtn.exitStart = millis();
+        this.playBtn.exitStarted = true;
+    }
+
 }
