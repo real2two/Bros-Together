@@ -8,8 +8,8 @@ gameScene.setup = async function () {
     this.engine = Engine.create();
 
     //this.engine.gravity.scale = pow(10, -4); // Water.
-    this.engine.gravity.scale = pow(10, -3.7); // Soft Land.
-    //this.engine.gravity.scale = pow(10, -3.5); // A bit too much.
+    //this.engine.gravity.scale = pow(10, -3.7); // Soft Land.
+    this.engine.gravity.scale = pow(10, -3.5); // A bit too much.
     // Going any higher for the exponent may result in collisions missing.
 
     this.world = this.engine.world;
@@ -22,8 +22,13 @@ gameScene.setup = async function () {
     // Put them "into the scene" like this.
     // The `.push()`-ing is automatic as long as there is a `bodies[]` or `blocks[]` :D
     this.player = createBlock(0, 0, 20, 20);
+
     this.player.grounded = false;
     this.player.firstJump = false;
+    this.player.isTouchingBlock = false;
+    this.player.touchedBlockHeight = 0.0;
+    this.player.touchedBlockExtents = { begin: 0, end: 0 };
+
     Body.setMass(this.player, 25);
     Body.setInertia(this.player, Infinity);
 
@@ -34,6 +39,8 @@ gameScene.setup = async function () {
     //#region Player Grounding.
     Events.on(this.engine, "collisionStart", function (p_event) {
         for (const { bodyA, bodyB } of p_event.pairs) {
+            gameScene.player.isTouchingBlock = true;
+
             if ([bodyA, bodyB].includes(gameScene.player)) {
                 const other = bodyA === gameScene.player ? bodyB : bodyA;
 
@@ -47,16 +54,46 @@ gameScene.setup = async function () {
                     // It said `gameScene.game.indexOf()` :joy::
                     gameScene.bodies.splice(gameScene.bodies.indexOf(other), 1);
                     ++points;
-
                     continue;
                 }
 
-                if (['static', 'movable'].includes(other.is)) gameScene.player.grounded = true;
+                //gameScene.player.touchedBlockHeight = 0;
+                gameScene.player.touchedBlockExtents = { begin: Infinity, end: -Infinity }
+
+                for (let v of other.vertices) {
+                    gameScene.player.touchedBlockHeight = v.y;
+                    if (gameScene.player.touchedBlockHeight > v.y)
+                        gameScene.player.touchedBlockHeight = v.y;
+
+                    gameScene.player.touchedBlockExtents.begin = v.x;
+                    if (v.x < gameScene.player.touchedBlockExtents.begin)
+                        gameScene.player.touchedBlockExtents.begin = v.x;
+
+                    gameScene.player.touchedBlockExtents.end = v.x;
+                    if (v.x > gameScene.player.touchedBlockExtents.end)
+                        gameScene.player.touchedBlockExtents.end = v.x;
+                }
+                //
+
+                if (['static', 'movable'].includes(other.is)) {
+                    /*
+                    if (gameScene.player.isTouchingBlock && // Unnecessary check
+                        gameScene.player.position.y < gameScene.player.touchedBlockHeight &&
+                        gameScene.player.position.x < gameScene.player.touchedBlockExtents.end &&
+                        gameScene.player.position.x > gameScene.player.touchedBlockExtents.begin
+                    )
+                    */
+                    gameScene.player.grounded = true;
+                }
             }
         }
-    });
+    }
+    );
 
     Events.on(this.engine, "collisionEnd", function (p_event) {
+        gameScene.player.isTouchingBlock = false;
+        //gameScene.player.touchedBlockHeight = null;
+
         for (const { bodyA, bodyB } of p_event.pairs) {
             if ([bodyA, bodyB].includes(gameScene.player)) {
                 const other = bodyA === gameScene.player ? bodyB : bodyA;
@@ -79,6 +116,7 @@ gameScene.setup = async function () {
 }
 
 gameScene.update = function () {
+    console.log("Grounded:", this.player.grounded, "\nFirstJump:", this.player.firstJump);
     // These are slow. Simply setting the inertia to `Infinity` is betterwwwww.
     //Body.setAngle(this.player, 0);
     //Body.setAngularVelocity(this.player, 0);
@@ -113,9 +151,12 @@ gameScene.update = function () {
 
             Body.applyForce(this.player, this.player.position, Vector.create(-0.01, 0));
 
+<<<<<<< Updated upstream
             forces["frame"] = frameCount;
             forces["frame"]["x"] = -0.01;
             forces["frame"]["y"] = 0;
+=======
+>>>>>>> Stashed changes
         } else {
             logMovement('a', false);
         }
@@ -124,9 +165,12 @@ gameScene.update = function () {
             logMovement('d', true);
 
             Body.applyForce(this.player, this.player.position, Vector.create(0.01, 0));
+<<<<<<< Updated upstream
             forces["frame"] = frameCount;
             forces["frame"]["x"] = 0.01;
             forces["frame"]["y"] = 0;
+=======
+>>>>>>> Stashed changes
         } else {
             logMovement('d', false);
         }
@@ -135,14 +179,22 @@ gameScene.update = function () {
         //if (keyIsDown(83))
         //Body.applyForce(this.player, this.player.position, Vector.create(0, 0.01));
 
+<<<<<<< Updated upstream
         if (this.player.position.y > 250) return killPlayer();
+=======
+        if (this.player.position.y > 250)
+            return killPlayer();
+>>>>>>> Stashed changes
 
         if (this.player.position.x > 640 / 2 || this.player.position.x < -640 / 2) {
             if (playing_recording) {
                 stopPlayingRecording();
             } else {
                 nextLevel();
+<<<<<<< Updated upstream
                 console.log(JSON.stringify(forces));
+=======
+>>>>>>> Stashed changes
             }
         }
 
@@ -154,7 +206,6 @@ gameScene.update = function () {
     }
 }
 
-//#region `gameScene.draw()`:
 gameScene.draw = function () {
     for (let b of this.bodies) {
         if (b.hidden) continue;
@@ -180,6 +231,9 @@ gameScene.draw = function () {
                 stroke('#EE4B2B');
             }
         }
+
+        if (this.player === b && playing_recording)
+            fill();
 
         beginShape(TESS);
         for (let v of b.vertices)
@@ -216,7 +270,6 @@ gameScene.draw = function () {
         pop();
     }
 }
-//#endregion
 
 gameScene.drawUi = function () {
     // This function makes sure the text is on the corner:
@@ -225,7 +278,6 @@ gameScene.drawUi = function () {
 
     // Debugging Coordinates:
     if (mouseIsPressed) {
-        //#region
         push();
         rectMode(CORNER);
         fill(127);
@@ -238,15 +290,12 @@ gameScene.drawUi = function () {
         fill(255);
         textOff(coords, 0, 0);
         pop();
-        //#endregion
     }
 }
 
 gameScene.mousePressed = function () {
     //SOUNDS["Rickroll"].play();
 }
-
-let forces = {};
 
 gameScene.keyPressed = function name() {
     if (loading_level || playing_recording) return;
@@ -294,16 +343,10 @@ async function nextLevel() {
 function jump() {
     if (gameScene.player.grounded) {
         Body.applyForce(gameScene.player, gameScene.player.position, Vector.create(0, -0.3));
-        forces["frame"] = frameCount;
-        forces["frame"]["x"] = 0;
-        forces["frame"]["y"] = -0.3;
         gameScene.player.firstJump = false;
     } else if (gameScene.player.firstJump) {
         // Double jump:
         Body.applyForce(gameScene.player, gameScene.player.position, Vector.create(0, -0.28));
-        forces["frame"] = frameCount;
-        forces["frame"]["x"] = 0;
-        forces["frame"]["y"] = -0.28;
         gameScene.player.firstJump = false;
     }
 }
