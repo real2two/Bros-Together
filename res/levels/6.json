@@ -5,11 +5,11 @@
     },
     "sprites": [
         {
-            "id": "controls",
+            "id": "level-6",
             "x": 0,
             "y": 0,
-            "width": 240,
-            "height": 135,
+            "width": 617.142857,
+            "height": 347.142857,
             "only_show_when_playing_recording": true
         }
     ],
