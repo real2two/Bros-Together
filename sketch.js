@@ -57,6 +57,7 @@ function preload() {
 
     SPRITES['level-6'] = new Spritesheet('level-6.png');
     SPRITES['level-8'] = new Spritesheet('level-8.png');
+    SPRITES['final-level'] = new Spritesheet('final-level.png');
 }
 
 function setup() {
