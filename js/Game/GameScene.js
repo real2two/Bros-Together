@@ -222,9 +222,8 @@ gameScene.draw = function () {
                     break;
             }
 
-            if (b.killzone) {
+            if (b.killzone)
                 stroke('#EE4B2B');
-            }
         }
 
         if (this.player === b && playing_recording)
