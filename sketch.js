@@ -27,13 +27,11 @@ let SPRITES = {};
 
 function preload() {
     soundFormats('mp3');
-    loadAudio("Rickroll");
 
     for (let f of FONT_PATHS)
         FONTS[f] = loadFont(f);
 
     testsheet = new Spritesheet('test.png');
-    //testImage = loadImage("img/test.png");
 
     SPRITES['bg'] = new Spritesheet('bg.png');
 

@@ -4,9 +4,10 @@ let old_level_data;
 let savedRecording;
 
 function startLevelDebug(level_id, enable_errors = false) {
-    if (PRODUCTION === true) return loadLevelByID(level_id);
+    if (PRODUCTION === true)
+        return loadLevelByID(level_id);
 
-    stopDebugLevel();
+    stopLevelDebug();
 
     let first_load = true;
 
@@ -24,7 +25,7 @@ function startLevelDebug(level_id, enable_errors = false) {
             if (first_load) {
                 alert('Cannot find level with provided ID.');
                 document.getElementById('level_id').value = '';
-                stopDebugLevel();
+                stopLevelDebug();
             }
             return;
         };
@@ -41,7 +42,7 @@ function startLevelDebug(level_id, enable_errors = false) {
     }, 100);
 }
 
-function stopDebugLevel() {
+function stopLevelDebug() {
     if (level_debug_interval) {
         clearInterval(level_debug_interval);
         level_debug_interval = null;
@@ -55,12 +56,15 @@ function stopDebugLevel() {
 
 document.getElementById('level_id').onchange = evt => {
     const level_id = evt.target.value;
-    if (level_id === '') return stopDebugLevel();
+
+    if (level_id === '')
+        return stopLevelDebug();
     startLevelDebug(level_id);
 }
 
 function playRecordedRecording() {
-    if (!savedRecording) return alert('Cannot find saved recording.');
+    if (!savedRecording)
+        return alert('Cannot find saved recording.');
 
     const level = JSON.parse(old_level_data);
     level.recording = savedRecording;

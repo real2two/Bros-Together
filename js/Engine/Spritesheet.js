@@ -1,7 +1,6 @@
 class Spritesheet {
     constructor(p_sheet) {
         this.sheet = loadImage(`img/${p_sheet}`);
-        console.log(this.sheet);
         this.sprites = [];
     }
 

@@ -28,6 +28,7 @@ gameScene.setup = async function () {
     this.player.isTouchingBlock = false;
     this.player.touchedBlockHeight = 0.0;
     this.player.touchedBlockExtents = { begin: 0, end: 0 };
+    this.player.lastDeathTime = 0;
 
     Body.setMass(this.player, 25);
     Body.setInertia(this.player, Infinity);
@@ -109,15 +110,23 @@ gameScene.setup = async function () {
     // "Camera scripts" are functions that get a `Camera` as a parameter.
     // You modify the properties of the camera YOU RECEIVE, so the functionality can be transferred over.
 
-    this.cam.script = function name(p_cam) {
+    this.fadeWave = new SineWave(0.01, 0);
+    console.log(this.fadeWave);
+    //this.fadeWave.endWhenAngleAccumulatesTo(120);
+    this.cam.script = (p_cam) => {
+        switch (level) {
+            case 1:
+                p_cam.pos.z += this.fadeWave.get() * 250;
+                break;
+        }
         //p_cam.pos.x = sin(millis() * 0.001) * 250;
         //p_cam.center.x = p_cam.pos.x;
     }
+    this.fadeWave.set(0);
 }
 
 gameScene.update = function () {
-    console.log("Grounded:", this.player.grounded, "\nFirstJump:", this.player.firstJump);
-    // These are slow. Simply setting the inertia to `Infinity` is betterwwwww.
+    // These are slow. Simply setting the inertia to `Infinity` is better!
     //Body.setAngle(this.player, 0);
     //Body.setAngularVelocity(this.player, 0);
 
@@ -129,6 +138,7 @@ gameScene.update = function () {
 
         Engine.update(this.engine, deltaTime > 64 ? 64 : deltaTime);
 
+        //#region Player Loop:
         /*
         if (this.player.position.x > 640 / 2)
             Body.setPosition(this.player, {
@@ -146,6 +156,7 @@ gameScene.update = function () {
 
         // `W` / jumping is handled in the `testScene.keyPressed()` function.
         // Here we handle the sides:
+        //#region
         if (!loading_level && !playing_recording && keyIsDown(65) || playing_recording && holding['a']) { // a
             logMovement('a', true);
 
@@ -162,6 +173,8 @@ gameScene.update = function () {
         } else {
             logMovement('d', false);
         }
+
+        //#endregion
 
         // `S` key:
         //if (keyIsDown(83))
@@ -187,12 +200,14 @@ gameScene.update = function () {
 }
 
 gameScene.draw = function () {
+    this.cam.pos.z = this.fadeWave.get() * 250;
+
     for (let b of this.bodies) {
         if (b.hidden) continue;
 
         push();
 
-        if (loadedBodies.includes(b)) {
+        if (loadedBodies.includes(b)) { // Styling changes:
             switch (b.is) {
                 case 'movable':
                     fill(150);
@@ -230,6 +245,7 @@ gameScene.draw = function () {
         pop();
     }
 
+    // Rendering:
     for (let { id, x = 0, y = 0, width, height } of shown_sprites) {
         if (!id || !SPRITES[id] || typeof x !== 'number' || typeof y !== 'number' ||
             typeof width !== 'number' || typeof height !== 'number')
@@ -242,6 +258,7 @@ gameScene.draw = function () {
         pop();
     }
 
+    // ..also rendering:
     for (const { sprite, x, y } of bg) {
         push();
         translate(x - (this.player.positionPrev.x / 2), y - (this.player.positionPrev.y / 6));
@@ -257,7 +274,7 @@ gameScene.drawUi = function () {
     textOff(`Points: ${points}`, 15, 15);
 
     // Debugging Coordinates:
-    if (mouseIsPressed) {
+    if (!PRODUCTION && mouseIsPressed) {
         push();
         rectMode(CORNER);
         fill(127);
@@ -273,12 +290,9 @@ gameScene.drawUi = function () {
     }
 }
 
-gameScene.mousePressed = function () {
-    //SOUNDS["Rickroll"].play();
-}
-
 gameScene.keyPressed = function name() {
-    if (loading_level || playing_recording) return;
+    if (loading_level || playing_recording)
+        return;
 
     switch (keyCode) {
         case 87:
@@ -295,6 +309,7 @@ gameScene.keyPressed = function name() {
 }
 
 function killPlayer() {
+    gameScene.player.lastDeathTime = performance.now();
     gameScene.player.lastDeathPosition = { ...gameScene.player.position };
     loadLevel(loadedLevel);
 }
