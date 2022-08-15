@@ -200,7 +200,7 @@ gameScene.draw = function () {
             stopPlayingRecording();
         }
     }
-    
+
     for (let b of this.bodies) {
         if (b.hidden) continue;
 
@@ -214,8 +214,9 @@ gameScene.draw = function () {
                 case 'collectable':
                     push();
                     translate(b.position.x, b.position.y);
-                    image(coinBloomTexture, 0, 0);
+                    image(coinBloomTexture, -12.5, -11.5);
                     pop();
+                    break;
                     fill('#F4DF4E');
                     break;
                 case 'static':
@@ -237,10 +238,12 @@ gameScene.draw = function () {
         //if (this.player === b && playing_recording)
         //    fill(68, 135, 246);
 
-        beginShape(TESS);
-        for (let v of b.vertices)
-            vertex(v.x, v.y);
-        endShape(CLOSE);
+        if (b.is != 'collectable') {
+            beginShape(TESS);
+            for (let v of b.vertices)
+                vertex(v.x, v.y);
+            endShape(CLOSE);
+        }
 
         //if (this.player === b && playing_recording) {
         //    textAlign(CENTER);
