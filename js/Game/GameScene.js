@@ -37,7 +37,7 @@ gameScene.setup = async function () {
     await cacheLevels();
     loadLevelByID(1);
 
-    //#region Player Grounding.
+    //#region Player Grounding and Collisions.
     Events.on(this.engine, "collisionStart", function (p_event) {
         for (const { bodyA, bodyB } of p_event.pairs) {
             gameScene.player.isTouchingBlock = true;
@@ -46,6 +46,7 @@ gameScene.setup = async function () {
                 const other = bodyA === gameScene.player ? bodyB : bodyA;
 
                 if (other && other.killzone) {
+                    SOUNDS["killzone"].play();
                     killPlayer();
                     return;
                 }
@@ -218,7 +219,7 @@ gameScene.draw = function () {
                     image(coinBloomTexture, -12.5, -11.5);
                     pop();
                     break;
-                    //fill('#F4DF4E');
+                //fill('#F4DF4E');
                 case 'static':
                 default:
                     noFill();
@@ -339,7 +340,6 @@ function killPlayer() {
     gameScene.player.lastDeathTime = performance.now();
     gameScene.player.lastDeathPosition = { ...gameScene.player.position };
     loadLevel(loadedLevel);
-    SOUNDS["killzone"].play();
 }
 
 let loading_level = false;

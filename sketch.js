@@ -34,6 +34,7 @@ function preload() {
     // It'll automatically truncate the extension,
     // ..for the name name of the property of `SOUNDS`.
     loadAudio("coin.wav");
+    loadAudio("killzone.wav");
     loadAudio("jump_low.mp3");
     loadAudio("jump_high.mp3");
     loadAudio("Title.mp3");
@@ -130,5 +131,6 @@ function windowResized() {
 
 function keyPressed() { if (currentScene) currentScene.keyPressed(); }
 function mousePressed() { if (currentScene) currentScene.mousePressed(); }
+function mouseClicked() { if (currentScene) currentScene.mouseClicked(); }
 //#endregion
 

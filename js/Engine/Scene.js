@@ -29,6 +29,8 @@ class Scene {
 
     drawUi() { }
 
+    mouseClicked() { }
+
     mousePressed() { }
 
     mouseMoved() { }
