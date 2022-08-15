@@ -25,6 +25,12 @@
             "height": 50
         },
         {
+            "is": "collectable",
+            "x": -145,
+            "height": 50,
+            "properties": { "isStatic": false }
+        },
+        {
             "y": 15,
             "width": 45,
             "killzone": true
