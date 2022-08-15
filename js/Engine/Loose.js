@@ -14,5 +14,5 @@ function textOff(p_str, p_xoff, p_yoff) {
 }
 
 function loadAudio(p_name) {
-    SOUNDS[p_name] = loadSound(`res/audio/${p_name}.mp3`);
+    SOUNDS[p_name.split('.')[0]] = loadSound(`res/audio/${p_name}`);
 }

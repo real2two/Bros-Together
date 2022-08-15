@@ -16,6 +16,7 @@ titleScene.setup = function () {
         exitStart: 0,
         exitStarted: false,
     };
+    SOUNDS["Title"].loop();
 }
 
 titleScene.update = function () {

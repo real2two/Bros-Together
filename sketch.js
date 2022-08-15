@@ -28,7 +28,15 @@ let SPRITES = {};
 let coinBloomTexture;
 
 function preload() {
-    soundFormats('mp3');
+    soundFormats('mp3', 'wav');
+
+    // Give the full name of the file.
+    // It'll automatically truncate the extension,
+    // ..for the name name of the property of `SOUNDS`.
+    loadAudio("coin.wav");
+    loadAudio("jump_low.mp3");
+    loadAudio("jump_high.mp3");
+    loadAudio("Title.mp3");
 
     for (let f of FONT_PATHS)
         FONTS[f] = loadFont(f);

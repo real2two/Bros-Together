@@ -51,6 +51,7 @@ gameScene.setup = async function () {
                 }
 
                 if (other && other.is && other.is === 'collectable') {
+                    SOUNDS["coin"].play();
                     Composite.remove(gameScene.engine.world, other);
                     // It said `gameScene.game.indexOf()` :joy::
                     gameScene.bodies.splice(gameScene.bodies.indexOf(other), 1);
@@ -217,8 +218,7 @@ gameScene.draw = function () {
                     image(coinBloomTexture, -12.5, -11.5);
                     pop();
                     break;
-                    fill('#F4DF4E');
-                    break;
+                    //fill('#F4DF4E');
                 case 'static':
                 default:
                     noFill();
@@ -230,10 +230,12 @@ gameScene.draw = function () {
                 stroke('#EE4B2B');
         }
 
+        /*
         if (this.player === b && playing_recording) {
             pop();
             continue;
         }
+        */
 
         //if (this.player === b && playing_recording)
         //    fill(68, 135, 246);
@@ -258,7 +260,8 @@ gameScene.draw = function () {
     if (playing_recording) {
         push();
         translate(bot_pos.x, bot_pos.y);
-        fill(68, 135, 246);
+        //fill(68, 135, 246); // Older color.
+        fill(96, 153, 247);
         square(0, 0, 20);
         textAlign(CENTER);
         fill(0);
@@ -331,10 +334,12 @@ gameScene.keyPressed = function name() {
 }
 
 function killPlayer() {
-    if (got_point) --points;
+    if (got_point)
+        --points;
     gameScene.player.lastDeathTime = performance.now();
     gameScene.player.lastDeathPosition = { ...gameScene.player.position };
     loadLevel(loadedLevel);
+    SOUNDS["killzone"].play();
 }
 
 let loading_level = false;
@@ -362,9 +367,11 @@ function jump() {
     if (gameScene.player.grounded) {
         Body.applyForce(gameScene.player, gameScene.player.position, Vector.create(0, -0.3));
         gameScene.player.firstJump = false;
+        SOUNDS["jump_low"].play();
     } else if (gameScene.player.firstJump) {
         // Double jump:
         Body.applyForce(gameScene.player, gameScene.player.position, Vector.create(0, -0.28));
         gameScene.player.firstJump = false;
+        SOUNDS["jump_high"].play();
     }
 }

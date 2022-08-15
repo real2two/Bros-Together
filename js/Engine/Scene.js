@@ -3,6 +3,13 @@ let SCENES = [];
 function setScene(p_scene) {
     currentScene = p_scene;
     currentScene.setup();
+
+    let sObj;
+    for (let s in SOUNDS) {
+        sObj = s;
+        delete s;
+        s = sObj;
+    }
 }
 
 class Scene {
