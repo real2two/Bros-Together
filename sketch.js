@@ -45,6 +45,8 @@ function preload() {
 
     SPRITES['map_editor'] = new Spritesheet('map_editor.png');
     SPRITES['how_to_unlock'] = new Spritesheet('how_to_unlock.png');
+
+    SPRITES['level-6'] = new Spritesheet('level-6.png');
 }
 
 function setup() {

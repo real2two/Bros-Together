@@ -268,7 +268,8 @@ gameScene.draw = function () {
     }
 
     // Rendering:
-    for (let { id, x = 0, y = 0, width, height } of shown_sprites) {
+    for (let { id, x = 0, y = 0, width, height, only_show_when_playing_recording } of shown_sprites) {
+        if (!playing_recording && only_show_when_playing_recording) continue;
         if (!id || !SPRITES[id] || typeof x !== 'number' || typeof y !== 'number' ||
             typeof width !== 'number' || typeof height !== 'number')
             continue;
