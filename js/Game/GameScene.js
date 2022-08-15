@@ -2,7 +2,8 @@
 
 let gameScene = new Scene();
 
-let bg = [ { sprite: 'bg', x: 0, y: 0 }];
+let bg = [ { sprite: 'bg', x: 0, y: 0 } ];
+let death = null;
 
 gameScene.setup = async function () {
     this.engine = Engine.create();
@@ -42,7 +43,7 @@ gameScene.setup = async function () {
                 const other = bodyA === gameScene.player ? bodyB : bodyA;
 
                 if (other && other.killzone) {
-                    return killPlayer();
+                    return killPlayer(true);
                 }
 
                 if (other && other.is && other.is === 'collectable') {
@@ -64,7 +65,7 @@ gameScene.setup = async function () {
             if ([bodyA, bodyB].includes(gameScene.player)) {
                 const other = bodyA === gameScene.player ? bodyB : bodyA;
                 if (['static', 'movable'].includes(other.is) && !other.removed) {
-                    gameScene.player.firstJump = true;
+                    //gameScene.player.firstJump = true;
                     gameScene.player.grounded = false;
                 }
             }
@@ -138,7 +139,7 @@ gameScene.update = function () {
             //if (keyIsDown(83))
             //Body.applyForce(this.player, this.player.position, Vector.create(0, 0.01));
 
-            if (this.player.position.y > 250) return killPlayer();
+            if (this.player.position.y > 250) return killPlayer(true);
 
             if (this.player.position.x > 640 / 2 || this.player.position.x < -640 / 2) {
                 if (playing_recording) {
@@ -159,6 +160,16 @@ gameScene.update = function () {
 
 //#region `gameScene.draw()`:
 gameScene.draw = function () {
+    if (death) {
+        push();
+        translate(death.x, death.y);
+        imageMode(CENTER);
+        image(SPRITES[`death-${++death.frame}`].sheet, 0, 0);
+        pop();
+
+        if (death.frame >= 5) death = null;
+    }
+
     for (let b of this.bodies) {
         if (b.hidden) continue;
 
@@ -263,12 +274,16 @@ gameScene.keyPressed = function name() {
         case 82: // `R`
             console.log("Resetting...");
 
-            killPlayer();
+            killPlayer(true);
             break;
     }
 }
 
-function killPlayer() {
+function killPlayer(died = false) {
+    if (died === true) {
+        death = { ...gameScene.player.position, frame: 0 };
+    }
+
     gameScene.player.lastDeathPosition = { ...gameScene.player.position };
     loadLevel(loadedLevel);
 }
@@ -300,7 +315,7 @@ function jump() {
         forces["frame"] = frameCount;
         forces["frame"]["x"] = 0;
         forces["frame"]["y"] = -0.3;
-        gameScene.player.firstJump = false;
+        gameScene.player.firstJump = true;
     } else if (gameScene.player.firstJump) {
         // Double jump:
         Body.applyForce(gameScene.player, gameScene.player.position, Vector.create(0, -0.28));
