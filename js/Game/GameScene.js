@@ -228,7 +228,7 @@ gameScene.draw = function () {
         }
 
         if (this.player === b && playing_recording)
-            fill();
+            fill(68, 135, 246);
 
         beginShape(TESS);
         for (let v of b.vertices)
