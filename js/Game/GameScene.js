@@ -213,7 +213,11 @@ gameScene.draw = function () {
                     fill(150);
                     break;
                 case 'collectable':
-                    fill('#F4DF4E')
+                    push();
+                    translate(b.position.x, b.position.y);
+                    image(coinBloomTexture, 0, 0);
+                    pop();
+                    fill('#F4DF4E');
                     break;
                 case 'static':
                 default:
