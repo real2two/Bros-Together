@@ -207,7 +207,7 @@ gameScene.draw = function () {
 
     for (const { sprite, x, y } of bg) {
         push();
-        translate(x - (this.player.positionPrev.x / 2), y);
+        translate(x - (this.player.positionPrev.x / 2), y - (this.player.positionPrev.y / 6));
         imageMode(CENTER);
         image(SPRITES[sprite].sheet, 0, 0, width, height);
         pop();

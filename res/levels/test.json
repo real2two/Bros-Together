@@ -47,12 +47,56 @@
                 "mass": 250,
                 "inverseMass": 0.004
             },
-            
             "after_recording": true
         }
     ],
     "recording": {
         "lasts": 3000,
-        "actions": [{"when":116.79999999981374,"press":"d","hold":true},{"when":199.79999999981374,"press":"d","hold":false},{"when":399.89999999990687,"press":"d","hold":true},{"when":499.79999999981374,"press":"d","hold":false},{"when":917,"press":"d","hold":true},{"when":999.7999999998137,"press":"d","hold":false},{"when":1317,"press":"d","hold":true},{"when":1835.8999999999069,"press":"w"},{"when":2516.7000000001863,"press":"d","hold":false}]
+        "actions": [
+            {
+                "when": 116.79999999981374,
+                "press": "d",
+                "hold": true
+            },
+            {
+                "when": 199.79999999981374,
+                "press": "d",
+                "hold": false
+            },
+            {
+                "when": 399.89999999990687,
+                "press": "d",
+                "hold": true
+            },
+            {
+                "when": 499.79999999981374,
+                "press": "d",
+                "hold": false
+            },
+            {
+                "when": 917,
+                "press": "d",
+                "hold": true
+            },
+            {
+                "when": 999.7999999998137,
+                "press": "d",
+                "hold": false
+            },
+            {
+                "when": 1317,
+                "press": "d",
+                "hold": true
+            },
+            {
+                "when": 1835.8999999999069,
+                "press": "w"
+            },
+            {
+                "when": 2516.7000000001863,
+                "press": "d",
+                "hold": false
+            }
+        ]
     }
 }
