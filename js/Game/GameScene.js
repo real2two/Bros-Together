@@ -2,8 +2,7 @@
 
 let gameScene = new Scene();
 
-let bg = [ { sprite: 'bg', x: 0, y: 0 } ];
-let death = null;
+let bg = [{ sprite: 'bg', x: 0, y: 0 }];
 
 gameScene.setup = async function () {
     this.engine = Engine.create();
@@ -15,10 +14,6 @@ gameScene.setup = async function () {
 
     this.world = this.engine.world;
     this.bodies = [];
-
-    this.anim = new Animator(testsheet); // There's already a class called "Animation" for CSS animations...
-
-    console.log("Frames:", this.anim.frames);
 
     this.cam = new Camera();
     this.cam.clearColor = color(0, 120);
@@ -43,7 +38,7 @@ gameScene.setup = async function () {
                 const other = bodyA === gameScene.player ? bodyB : bodyA;
 
                 if (other && other.killzone) {
-                    return killPlayer(true);
+                    return killPlayer();
                 }
 
                 if (other && other.is && other.is === 'collectable') {
@@ -65,7 +60,7 @@ gameScene.setup = async function () {
             if ([bodyA, bodyB].includes(gameScene.player)) {
                 const other = bodyA === gameScene.player ? bodyB : bodyA;
                 if (['static', 'movable'].includes(other.is) && !other.removed) {
-                    //gameScene.player.firstJump = true;
+                    gameScene.player.firstJump = true;
                     gameScene.player.grounded = false;
                 }
             }
@@ -91,64 +86,64 @@ gameScene.update = function () {
     // The user can switch tabs, but cannot change applications:
     if (!!focused && !!docFocus && !!winFocus &&
         !!document.hasFocus() && document.visibilityState === 'visible') {
-            if (recording && !recording_since) recording_since = performance.now();
+        if (recording && !recording_since) recording_since = performance.now();
 
-            Engine.update(this.engine, deltaTime > 64 ? 64 : deltaTime);
+        Engine.update(this.engine, deltaTime > 64 ? 64 : deltaTime);
 
-            /*
-            if (this.player.position.x > 640 / 2)
-                Body.setPosition(this.player, {
-                    x: -640 / 2,
-                    y: this.player.position.y > cy ? cy : this.player.position.y
-                });
-            else if (this.player.position.x < -640 / 2)
-                Body.setPosition(this.player, {
-                    x: 640 / 2,
-                    y: this.player.position.y > cy ? cy : this.player.position.y
-                });
-                */
+        /*
+        if (this.player.position.x > 640 / 2)
+            Body.setPosition(this.player, {
+                x: -640 / 2,
+                y: this.player.position.y > cy ? cy : this.player.position.y
+            });
+        else if (this.player.position.x < -640 / 2)
+            Body.setPosition(this.player, {
+                x: 640 / 2,
+                y: this.player.position.y > cy ? cy : this.player.position.y
+            });
+            */
 
-            //#endregion
+        //#endregion
 
-            // `W` / jumping is handled in the `testScene.keyPressed()` function.
-            // Here we handle the sides:
-            if (!loading_level && !playing_recording && keyIsDown(65) || playing_recording && holding['a']) { // a
-                logMovement('a', true);
+        // `W` / jumping is handled in the `testScene.keyPressed()` function.
+        // Here we handle the sides:
+        if (!loading_level && !playing_recording && keyIsDown(65) || playing_recording && holding['a']) { // a
+            logMovement('a', true);
 
-                Body.applyForce(this.player, this.player.position, Vector.create(-0.01, 0));
+            Body.applyForce(this.player, this.player.position, Vector.create(-0.01, 0));
 
-                forces["frame"] = frameCount;
-                forces["frame"]["x"] = -0.01;
-                forces["frame"]["y"] = 0;
+            forces["frame"] = frameCount;
+            forces["frame"]["x"] = -0.01;
+            forces["frame"]["y"] = 0;
+        } else {
+            logMovement('a', false);
+        }
+
+        if (!loading_level && !playing_recording && keyIsDown(68) || playing_recording && holding['d']) { // d
+            logMovement('d', true);
+
+            Body.applyForce(this.player, this.player.position, Vector.create(0.01, 0));
+            forces["frame"] = frameCount;
+            forces["frame"]["x"] = 0.01;
+            forces["frame"]["y"] = 0;
+        } else {
+            logMovement('d', false);
+        }
+
+        // `S` key:
+        //if (keyIsDown(83))
+        //Body.applyForce(this.player, this.player.position, Vector.create(0, 0.01));
+
+        if (this.player.position.y > 250) return killPlayer();
+
+        if (this.player.position.x > 640 / 2 || this.player.position.x < -640 / 2) {
+            if (playing_recording) {
+                stopPlayingRecording();
             } else {
-                logMovement('a', false);
+                nextLevel();
+                console.log(JSON.stringify(forces));
             }
-
-            if (!loading_level && !playing_recording && keyIsDown(68) || playing_recording && holding['d']) { // d
-                logMovement('d', true);
-
-                Body.applyForce(this.player, this.player.position, Vector.create(0.01, 0));
-                forces["frame"] = frameCount;
-                forces["frame"]["x"] = 0.01;
-                forces["frame"]["y"] = 0;
-            } else {
-                logMovement('d', false);
-            }
-
-            // `S` key:
-            //if (keyIsDown(83))
-            //Body.applyForce(this.player, this.player.position, Vector.create(0, 0.01));
-
-            if (this.player.position.y > 250) return killPlayer(true);
-
-            if (this.player.position.x > 640 / 2 || this.player.position.x < -640 / 2) {
-                if (playing_recording) {
-                    stopPlayingRecording();
-                } else {
-                    nextLevel();
-                    console.log(JSON.stringify(forces));
-                }
-            }
+        }
 
         // `S` key:
         //if (keyIsDown(83))
@@ -160,16 +155,6 @@ gameScene.update = function () {
 
 //#region `gameScene.draw()`:
 gameScene.draw = function () {
-    if (death) {
-        push();
-        translate(death.x, death.y);
-        imageMode(CENTER);
-        image(SPRITES[`death-${++death.frame}`].sheet, 0, 0);
-        pop();
-
-        if (death.frame >= 5) death = null;
-    }
-
     for (let b of this.bodies) {
         if (b.hidden) continue;
 
@@ -219,7 +204,7 @@ gameScene.draw = function () {
         image(SPRITES[id].sheet, 0, 0, width, height);
         pop();
     }
-    
+
     for (const { sprite, x, y } of bg) {
         push();
         translate(x - (this.player.positionPrev.x / 2), y);
@@ -234,9 +219,6 @@ gameScene.drawUi = function () {
     // This function makes sure the text is on the corner:
     //textOff(fps, 0, 0);
     textOff(`Points: ${points}`, 15, 15);
-
-    //this.anim.draw(mouseX, mouseY);
-    //image(testsheet.sprites[1], mouseX, mouseY, 400, 400);
 
     // Debugging Coordinates:
     if (mouseIsPressed) {
@@ -264,7 +246,7 @@ let forces = {};
 
 gameScene.keyPressed = function name() {
     if (loading_level || playing_recording) return;
-    
+
     switch (keyCode) {
         case 87:
             logMovement('w');
@@ -274,16 +256,12 @@ gameScene.keyPressed = function name() {
         case 82: // `R`
             console.log("Resetting...");
 
-            killPlayer(true);
+            killPlayer();
             break;
     }
 }
 
-function killPlayer(died = false) {
-    if (died === true) {
-        death = { ...gameScene.player.position, frame: 0 };
-    }
-
+function killPlayer() {
     gameScene.player.lastDeathPosition = { ...gameScene.player.position };
     loadLevel(loadedLevel);
 }
@@ -294,7 +272,7 @@ async function nextLevel() {
     stopRecording();
 
     gameScene.player.lastDeathPosition = null;
-    
+
     if (old_level_data || level === MAX_LEVELS) {
         loadLevel(loadedLevel);
     } else {
@@ -315,7 +293,7 @@ function jump() {
         forces["frame"] = frameCount;
         forces["frame"]["x"] = 0;
         forces["frame"]["y"] = -0.3;
-        gameScene.player.firstJump = true;
+        gameScene.player.firstJump = false;
     } else if (gameScene.player.firstJump) {
         // Double jump:
         Body.applyForce(gameScene.player, gameScene.player.position, Vector.create(0, -0.28));

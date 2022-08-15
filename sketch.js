@@ -3,7 +3,10 @@ if (PRODUCTION === false) {
     document.getElementById('level_data').style.display = 'none';
     document.getElementById('debug').style.display = 'block';
     document.getElementById('play_recording').style.display = 'block';
+    document.getElementsByTagName('title')[0].innerText = '[DEBUG] Wowie 4.0 Submission!';
 }
+
+// Beware that going to `http://127.0.0.1:5500/` will NOT give you debug mode.
 
 let cx = 0.0, cy = 0.0;
 let currentScene;
@@ -40,8 +43,6 @@ function preload() {
 
     SPRITES['map_editor'] = new Spritesheet('map_editor.png');
     SPRITES['how_to_unlock'] = new Spritesheet('how_to_unlock.png');
-
-    for (let i = 1; i < 6; ++i) SPRITES[`death-${i}`] = new Spritesheet(`death-${i}.png`);
 }
 
 function setup() {

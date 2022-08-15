@@ -16,15 +16,15 @@
             "x": -100,
             "y": 0,
             "width": 50,
-            "height": 5
+            "height": 5,
+            "killzone": true
         },
         {
             "is": "static",
             "x": 100,
             "y": 0,
             "width": 50,
-            "height": 20,
-            "killzone": true
+            "height": 20
         },
         {
             "is": "movable",
