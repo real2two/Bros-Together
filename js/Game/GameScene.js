@@ -38,13 +38,14 @@ gameScene.setup = async function () {
                 const other = bodyA === gameScene.player ? bodyB : bodyA;
 
                 if (other && other.killzone) {
-                    return killPlayer();
+                    killPlayer();
+                    return;
                 }
 
                 if (other && other.is && other.is === 'collectable') {
-                    Composite.remove(currentScene.engine.world, other);
-                    currentScene.bodies.splice(currentScene.bodies.indexOf(other), 1);
-
+                    Composite.remove(gameScene.engine.world, other);
+                    // It said `gameScene.game.indexOf()` :joy::
+                    gameScene.bodies.splice(gameScene.bodies.indexOf(other), 1);
                     ++points;
 
                     continue;
@@ -196,7 +197,9 @@ gameScene.draw = function () {
     }
 
     for (let { id, x = 0, y = 0, width, height } of shown_sprites) {
-        if (!id || !SPRITES[id] || typeof x !== 'number' || typeof y !== 'number' || typeof width !== 'number' || typeof height !== 'number') continue;
+        if (!id || !SPRITES[id] || typeof x !== 'number' || typeof y !== 'number' ||
+            typeof width !== 'number' || typeof height !== 'number')
+            continue;
 
         push();
         translate(x, y);
@@ -226,7 +229,8 @@ gameScene.drawUi = function () {
         push();
         rectMode(CORNER);
         fill(127);
-        let coords = `${mouseX}, ${mouseY}`;
+        // Best approximation without using projection:
+        let coords = `${(mouseX - cx) / 2}, ${(mouseY - cy) / 2}`;
         let twid = textWidth(coords);
         translate(mouseX > cx ? mouseX - twid : mouseX, mouseY);
         rect(0, 0, twid, 36);
