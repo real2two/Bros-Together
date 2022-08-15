@@ -40,6 +40,8 @@ function preload() {
 
     SPRITES['map_editor'] = new Spritesheet('map_editor.png');
     SPRITES['how_to_unlock'] = new Spritesheet('how_to_unlock.png');
+
+    for (let i = 1; i < 6; ++i) SPRITES[`death-${i}`] = new Spritesheet(`death-${i}.png`);
 }
 
 function setup() {
