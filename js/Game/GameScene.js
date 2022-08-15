@@ -65,7 +65,7 @@ gameScene.setup = async function () {
             if ([bodyA, bodyB].includes(gameScene.player)) {
                 const other = bodyA === gameScene.player ? bodyB : bodyA;
                 if (['static', 'movable'].includes(other.is) && !other.removed) {
-                    gameScene.player.firstJump = true;
+                    //gameScene.player.firstJump = true;
                     gameScene.player.grounded = false;
                 }
             }
@@ -315,7 +315,7 @@ function jump() {
         forces["frame"] = frameCount;
         forces["frame"]["x"] = 0;
         forces["frame"]["y"] = -0.3;
-        gameScene.player.firstJump = false;
+        gameScene.player.firstJump = true;
     } else if (gameScene.player.firstJump) {
         // Double jump:
         Body.applyForce(gameScene.player, gameScene.player.position, Vector.create(0, -0.28));
