@@ -45,10 +45,9 @@
         {
             "is": "static",
             "x": -400,
-            "y": -15,
+            "y": -23,
             "width": 400,
-            "height": 154,
-            "killzone": true
+            "height": 170
         },
         {
             "is": "static",
@@ -74,9 +73,10 @@
         {
             "is": "static",
             "x": -237.5,
-            "y": -170,
+            "y": -200,
             "width": 75,
-            "height": 154
+            "height": 184,
+            "killzone":true
         },
         {
             "is": "static",
