@@ -53,7 +53,7 @@ titleScene.draw = function () {
 
     fill(0);
     textSize(16);
-    //text("Click To Begin.", 0, 0);
+    text("Click To Begin.", 0, 0);
 }
 
 titleScene.mouseClicked = function () {
